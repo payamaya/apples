@@ -18,7 +18,7 @@ public class GameServer {
     }
 
     public void start() {
-        System.out.println("Waiting for clients...");
+        System.out.println("Server started. Waiting for clients...");
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
@@ -27,7 +27,7 @@ public class GameServer {
                 new Thread(clientHandler).start();
                 System.out.println("Client connected.");
             } catch (IOException e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println("Error accepting client: " + e.getMessage());
             }
         }
     }

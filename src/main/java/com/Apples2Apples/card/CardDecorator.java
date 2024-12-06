@@ -3,17 +3,12 @@ package com.Apples2Apples.card;
 public abstract class CardDecorator extends Card {
     protected Card decoratedCard;
 
-    public CardDecorator(Card decoratedCard) {
-        super(decoratedCard.getDescription());
+    public CardDecorator(String value, CardType cardType, Card decoratedCard) {
+        super(value, cardType); // Pass value and cardType to the parent class (Card)
         this.decoratedCard = decoratedCard;
     }
 
-    @Override
-    public String getValue() {
-        return decoratedCard.getValue();
-    }
-
-    @Override
+   @Override
     public String getDescription() {
         return decoratedCard.getDescription();
     }

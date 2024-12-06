@@ -1,17 +1,13 @@
 //package com.Apples2Apples.card;
 //
-//public class CardFactory {
+//import java.util.List;
 //
-//    public static RedAppleCard createCard(String cardType, String description) {
-//        switch (cardType) {
-//            case "STANDARD":
-//                return new RedAppleCard(description);
-//            case "WILD":
-//                return new WildRedAppleCard();
-//            case "APPLES_AND_PEARS":
-//                return new ApplesAndPearsCard();
-//            default:
-//                throw new IllegalArgumentException("Invalid card type: " + cardType);
-//        }
+//public class CardFactory {
+//    public static List<GreenAppleCard> createGreenAppleCards(List<String> data) {
+//        return data.stream().map(GreenAppleCard::new).toList();
+//    }
+//
+//    public static List<RedAppleCard> createRedAppleCards(List<String> data) {
+//        return data.stream().map(RedAppleCard::new).toList();
 //    }
 //}

@@ -23,11 +23,6 @@ public class PlayerNotification implements Subject {
     }
 
     @Override
-    public void notifyObservers(String message) {
-
-    }
-
-    @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
             observer.update(message);

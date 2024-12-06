@@ -1,486 +1,220 @@
-//package com.Apples2Apples.game;
-//
-//import com.Apples2Apples.card.Card;
-//import com.Apples2Apples.networking.GameServer;
-//import com.Apples2Apples.observer.GameNotification;
-//import com.Apples2Apples.observer.Observer;
-//import com.Apples2Apples.player.Player;
-//import com.Apples2Apples.player.PlayerFactory;
-//import com.Apples2Apples.util.CardUtil;
-//
-//import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.List;
-//import java.util.Random;
-//
-//
-//public class Game {
-//    private List<Player> players;
-//    private List<Card> greenApplesDeck;
-//    private List<Card> redApplesDeck;
-//    private Player currentJudge;
-//    private int winningGreenApples;
-//    private GameNotification gameNotification;
-//    private GameServer gameServer;
-//
-//    private static final int SERVER_PORT = 2048;
-//
-//    public Game(List<Player> players) {
-//        this.players = players;
-//        this.greenApplesDeck = loadGreenAppleDeck();
-//        this.redApplesDeck = loadRedAppleDeck();
-//        this.winningGreenApples = determineWinningGreenApples(players.size());
-//        shuffleDecks();
-//        assignInitialCards();
-//        randomizeJudge();
-//        assignJudge();
-//    }
-//
-//    private void startServer() {
-//        try {
-//            gameServer = new GameServer(SERVER_PORT);
-//            new Thread(() -> gameServer.start()).start();
-//            System.out.println("Server started on port " + SERVER_PORT);
-//        } catch (IOException e) {
-//            System.out.println("Error starting server: " + e.getMessage());
-//        }
-//    }
-//
-//
-//    // Load Green Apples (cards) from the file
-//// Load Green Apples (cards) from the file
-//    private List<Card> loadGreenAppleDeck() {
-//        return CardUtil.loadCardsFromFile("resources/greenApples.txt");
-//    }
-//
-//    // Load Red Apples (cards) from the file
-//    private List<Card> loadRedAppleDeck() {
-//        return CardUtil.loadCardsFromFile("resources/redApples.txt");
-//    }
-//
-//
-//    // Determine how many green apples are needed to win based on the number of players
-//    private int determineWinningGreenApples(int playerCount) {
-//        if (playerCount == 4) return 8;
-//        else if (playerCount == 5) return 7;
-//        else if (playerCount == 6) return 6;
-//        else if (playerCount == 7) return 5;
-//        else return 4; // For 8 or more players
-//    }
-//    // Notify all players (observers)
-////    private void notifyPlayers(String message) {
-////        for (Observer player : players) {
-////            player.update(message);
-////        }
-////    }
-//    // Shuffle both the red and green apples decks
-//    private void shuffleDecks() {
-//        CardUtil.shuffleDeck(greenApplesDeck);
-//        CardUtil.shuffleDeck(redApplesDeck);
-//    }
-//    // Notify all players (observers)
-//    private void notifyPlayers(String message) {
-//        for (Observer player : players) {
-//            player.update(message);
-//        }
-//        gameServer.broadcastMessage(message);
-//    }
-//    // Adds bot players if the table size is less than the required number
-//    private void addBotPlayersIfNeeded(int tableSize) {
-//        int currentSize = players.size();
-//        if (currentSize < tableSize) {
-//            int botsToAdd = tableSize - currentSize;
-//            for (int i = 0; i < botsToAdd; i++) {
-//                String botName = "Bot" + (i + 1);
-//                int botID = currentSize + i + 1;  // Unique ID for each bot
-//                List<Card> botHand = new ArrayList<>();  // Empty hand for bots
-//                players.add(PlayerFactory.createPlayer("bot", botID, null, botHand));  // Pass correct arguments
-//            }
-//        }
-//    }
-//
-//    // Assign initial cards to players (7 red apples each)
-//    private void assignInitialCards() {
-//        for (Player player : players) {
-//            // Make sure the player's hand is initialized
-//            if (player.getHand() == null) {
-//                player.setHand(new ArrayList<>());  // Initialize hand if it's null
-//            }
-//
-//            // Assign 7 red apples to each player
-//            for (int i = 0; i < 7; i++) {
-//                Card card = redApplesDeck.get(i);
-//                player.addCard(card);  // Add the card to the player's hand
-//            }
-//        }
-//    }
-//
-//
-//    // Randomize the judge
-//    private void randomizeJudge() {
-////        Random rand = new Random();
-////        int randomIndex = rand.nextInt(players.size());
-////        currentJudge = players.get(randomIndex); // Set the currentJudge field
-////        gameNotification = new GameNotification();
-////        gameNotification.setMessage(currentJudge.getName() + " is the judge.");
-//        Random rand = new Random();
-//        currentJudge = players.get(rand.nextInt(players.size()));
-//        notifyPlayers(currentJudge.getName() + " is the judge.");
-//    }
-//
-//    // Draw a green apple from the deck and notify players
-//    private void drawGreenApple() {
-//        if (!greenApplesDeck.isEmpty()) {
-//            Card greenApple = greenApplesDeck.remove(0);
-//            notifyPlayers("Green apple drawn: " + greenApple.getDescription());
-//        }
-//    }
-//    // Phase B: Players submit a red apple
-//    private void playRedApple() {
-//        List<Card> redAppleSubmissions = new ArrayList<>();
-//
-//        // Collect red apple submissions from all players (except the judge)
-//        for (Player player : players) {
-//            if (!player.equals(currentJudge)) {
-//                Card chosenCard = player.chooseRedAppleCard();
-//                redAppleSubmissions.add(chosenCard);
-//                player.removeCard(chosenCard); // Remove the selected card from the player's hand
-//            }
-//        }
-//
-//        // Randomize the order of the red apple submissions
-//        Collections.shuffle(redAppleSubmissions);
-//        gameNotification.setMessage("Red Apple submissions: ");
-//        for (Card card : redAppleSubmissions) {
-//            gameNotification.setMessage(card.getValue());
-//        }
-//
-//        // Now we can call selectWinner, passing the submissions
-//        selectWinner(redAppleSubmissions);
-//    }
-//
-//
-//    // Start the game logic
-//    public void startGame() {
-//        // Notify the players
-//        gameNotification.setMessage("The game has started!");
-//
-//        // Start the rounds and handle the phases
-//        while (true) {
-//            // Example phase logic
-//            drawGreenApple();
-//            playRedApple();
-//            replenishCards();
-//
-//            // Check if anyone has won
-//            if (isGameOver()) break;
-//
-//            // Rotate the judge
-//            rotateJudge();
-//        }
-//    }
-//    // Start a new round and inform players
-//    public void startNewRound() {
-//        notifyPlayers("New round has started!");
-//        notifyPlayers(currentJudge.getName() + " is the judge now.");
-//        drawGreenApple();
-//    }
-//
-//    // Handle phase of players submitting red apples
-//    public void playersSubmitRedApple(String selectedRedApple) {
-//        notifyPlayers("Players submit their red apples.");
-//    }
-//    // Phase C: Judge selects a winner
-//    private void selectWinner(List<Card> redAppleSubmissions) {
-//        Player judge = currentJudge;
-//        // Simulate the judge selecting a favorite red apple
-//        Card favoriteRedApple = judge.selectFavoriteRedApple(redAppleSubmissions);
-//
-//        // Notify all players of the selected winner
-//        gameNotification.setMessage(judge.getName() + " selected: " + favoriteRedApple.getValue());
-//
-//        // The player who submitted the favorite red apple wins a green apple
-//        for (Player player : players) {
-//            if (player.hasSubmitted(favoriteRedApple)) {
-//                player.addGreenApple();
-//                gameNotification.setMessage(player.getName() + " wins a green apple!");
-//                break;
-//            }
-//        }
-//    }
-//
-//    // Replenish hands after each round
-//    public void replenishCards() {
-//        for (Player player : players) {
-//            while (player.getHand().size() < 7) {
-//                Card card = redApplesDeck.remove(0);
-//                player.addCard(card);
-//            }
-//        }
-//    }
-//
-//    // Check for winner at the end of the game
-//    public void checkForWinner() {
-//        for (Player player : players) {
-//            if (player.getScore() >= winningGreenApples) {
-//                notifyPlayers(player.getName() + " wins the game!");
-//                return;
-//            }
-//        }
-//    }
-//    // Check if the game is over
-//    private boolean isGameOver() {
-//        for (Player player : players) {
-//            if (player.getScore() >= winningGreenApples) {
-//                gameNotification.setMessage(player.getName() + " has won the game!");
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//    // Rotate the judge for the next round
-//    private void rotateJudge() {
-//        int currentJudgeIndex = players.indexOf(getJudge());
-//        int nextJudgeIndex = (currentJudgeIndex + 1) % players.size(); // Cycle to the next player
-//        gameNotification.setMessage(players.get(nextJudgeIndex).getName() + " is the new judge.");
-//    }
-//
-//    // Helper method to get the current judge
-//    private Player getJudge() {
-//        return players.stream().filter(player -> player.isJudge()).findFirst().orElse(null);
-//    }
-//    private void assignJudge() {
-//        if (!players.isEmpty()) {
-//            players.get(0).setJudge(true);  // Assign the first player as the judge
-//        }
-//    }
-//}
 package com.Apples2Apples.game;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.common.Constants;
+import com.Apples2Apples.judging.DefaultJudgingStrategy;
+import com.Apples2Apples.judging.JudgeManager;
+import com.Apples2Apples.judging.NotificationService;
 import com.Apples2Apples.networking.GameServer;
+import com.Apples2Apples.networking.INetworkServer;
+import com.Apples2Apples.networking.IServerFactory;
 import com.Apples2Apples.observer.GameNotification;
-import com.Apples2Apples.observer.Observer;
+import com.Apples2Apples.phases.GamePhase;
+import com.Apples2Apples.player.Hand;
 import com.Apples2Apples.player.Player;
 import com.Apples2Apples.player.PlayerFactory;
-import com.Apples2Apples.util.CardUtil;
+import com.Apples2Apples.player.PlayerType;
+import com.Apples2Apples.util.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
+/**
+ * This class represents a game of Apples to Apples. It manages players, decks, judging,
+ * and the overall game flow.
+ */
 public class Game {
     private List<Player> players;
-    private List<Card> greenApplesDeck;
-    private List<Card> redApplesDeck;
     private Player currentJudge;
-    private int winningGreenApples;
+    private JudgeManager judgeManager;
+    private int currentPhaseIndex;
+    private List<GamePhase> phases;
+    private IServerFactory serverFactory;
+    private final List<Card> greenApplesDeck;
+    private final List<Card> redApplesDeck;
+    private final JudgeSelector judgeSelector;
+    private final int winningGreenApples;
+    
     private GameNotification gameNotification;
+    private final INetworkServer networkManager;
     private GameServer gameServer;
-    private static final int SERVER_PORT = 2048; // Example server port
+    private static final LoggerUtil logger = LoggerUtil.getInstance(Game.class);
+    private final RedAppleSubmissionManager submissionManager = new RedAppleSubmissionManager();
+    private final DeckManager deckManager;
 
-    public Game(List<Player> players) {
+    /**
+     * Creates a new Game instance with the provided players, table size, and server factory.
+     *
+     * @param players       The list of players participating in the game.
+     * @param tableSize     The desired size of the game table.
+     * @param serverFactory The factory used to create the network server.
+     */
+    public Game(List<Player> players, int tableSize, IServerFactory serverFactory, List<GamePhase> phases) {
         this.players = players;
-        this.greenApplesDeck = loadGreenAppleDeck();
-        this.redApplesDeck = loadRedAppleDeck();
-        this.winningGreenApples = determineWinningGreenApples(players.size());
+        this.networkManager = serverFactory.createServer();
+        this.gameServer = (GameServer) networkManager;
+        this.judgeSelector = new JudgeSelector(gameNotification);
+        this.deckManager = new DeckManager();
+        this.serverFactory = serverFactory;
+        this.judgeManager = judgeManager;
+        this.phases = phases;
+        this.currentPhaseIndex = 0;
+        this.currentJudge = players.get(0);
+
+        greenApplesDeck = loadGreenAppleDeck();
+        redApplesDeck = loadRedAppleDeck();
+        winningGreenApples = TabelSizeUtil.determineWinningGreenApples(players.size());
+        judgeManager = new JudgeManager(new DefaultJudgingStrategy(), new NotificationService(gameNotification));
+
         shuffleDecks();
-        assignInitialCards();
+        addBotPlayersIfNeeded(tableSize);
+        dealInitialCards();
         randomizeJudge();
         assignJudge();
+        startServer();
+    }
 
-        // Initialize gameServer after the game starts
+    public List<Card> getRedAppleSubmissions() {
+        return submissionManager.getSubmissions();
+    }
+
+    private void startServer() {
         try {
-            gameServer = new GameServer(SERVER_PORT);
-            new Thread(() -> gameServer.start()).start();
-            System.out.println("Server started on port " + SERVER_PORT);
-        } catch (IOException e) {
-            System.out.println("Error starting server: " + e.getMessage());
+            networkManager.startServer();
+            logger.info("Server started on port " + Constants.SERVER_PORT.getValue());
+        } catch (Exception e) {
+            logger.error("Error starting server: " + e.getMessage(), e);
         }
     }
 
     private List<Card> loadGreenAppleDeck() {
-        //return CardUtil.loadCardsFromFile("resources/greenApples.txt");
-        List<Card> cards = CardUtil.loadCardsFromFile("resources/greenApples.txt");
-        System.out.println("Loaded Green Apple Cards:");
-        for (Card card : cards) {
-            System.out.println(card.getValue());  // Make sure the value is being loaded correctly
-        }
-        return cards;
+        return CardUtil.createGreenApplesFromFile("resources/greenApples.txt");
     }
 
     private List<Card> loadRedAppleDeck() {
-        return CardUtil.loadCardsFromFile("resources/redApples.txt");
-    }
-
-    private int determineWinningGreenApples(int playerCount) {
-        if (playerCount == 4) return 8;
-        else if (playerCount == 5) return 7;
-        else if (playerCount == 6) return 6;
-        else if (playerCount == 7) return 5;
-        else return 4;
-    }
-
-    private void notifyPlayers(String message) {
-        // Notify all players (observers)
-        for (Observer player : players) {
-            player.update(message);
-        }
-        if (gameServer != null) {
-            gameServer.broadcastMessage(message);  // Only broadcast if gameServer is initialized
-        }
+        return CardUtil.createRedApplesFromFile("resources/redApples.txt");
     }
 
     private void shuffleDecks() {
-        CardUtil.shuffleDeck(greenApplesDeck);
-        CardUtil.shuffleDeck(redApplesDeck);
+        DeckShuffler.shuffleDeck(greenApplesDeck);
+        DeckShuffler.shuffleDeck(redApplesDeck);
     }
 
-    private void addBotPlayersIfNeeded(int tableSize) {
+    public void addBotPlayersIfNeeded(int tableSize) {
         int currentSize = players.size();
         if (currentSize < tableSize) {
             int botsToAdd = tableSize - currentSize;
             for (int i = 0; i < botsToAdd; i++) {
                 String botName = "Bot" + (i + 1);
-                int botID = currentSize + i + 1;  // Unique ID for each bot
-                List<Card> botHand = new ArrayList<>();  // Empty hand for bots
-                players.add(PlayerFactory.createPlayer("bot", botID, null, botHand));  // Pass correct arguments
+                Player botPlayer = PlayerFactory.createPlayer(PlayerType.BOT, botName, null, new Hand().getCards(), false);
+                players.add(botPlayer);
+                // If bot, ensure they can't see cards
+                botPlayer.setCanSeeCards(false);
             }
         }
     }
 
-    private void assignInitialCards() {
-        for (Player player : players) {
-            if (player.getHand() == null) {
-                player.setHand(new ArrayList<>());
-            }
+    // Use the DeckManager to deal initial cards to players
+    private void dealInitialCards() {
+        int handSize = Constants.HAND_SIZE_LIMIT.getValue();
+        deckManager.dealCards(players, redApplesDeck, handSize);
 
-            for (int i = 0; i < 7; i++) {
-                Card card = redApplesDeck.get(i);
-                player.addCard(card);
-            }
-        }
+        CardDisplayService displayService = new CardDisplayService();
+        players.forEach(displayService::displayPlayerHand);
     }
 
     private void randomizeJudge() {
-        Random rand = new Random();
-        int randomIndex = rand.nextInt(players.size());
-        currentJudge = players.get(randomIndex);
-        gameNotification = new GameNotification();
-        gameNotification.setMessage(currentJudge.getName() + " is the judge.");
+        currentJudge = judgeSelector.selectAndNotifyRandomJudge(players);
+    }
+    // Getter for JudgeManager
+    public JudgeManager getJudgeManager() {
+        return judgeManager;
     }
 
-    private void drawGreenApple() {
-//        if (!greenApplesDeck.isEmpty()) {
-//            Card greenApple = greenApplesDeck.remove(0);
-//            notifyPlayers("Green apple drawn: " + greenApple.getDescription());
-//        }
-        if (!greenApplesDeck.isEmpty()) {
-            Card greenApple = greenApplesDeck.remove(0);  // Draw the first card
-            notifyPlayers("Green apple drawn: " + greenApple.getValue());  // Use the card's value
-        } else {
-            notifyPlayers("No more green apples left to draw.");
-        }
+    // Getter for Players
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    private void playRedApple() {
-        List<Card> redAppleSubmissions = new ArrayList<>();
-
-        for (Player player : players) {
-            if (!player.equals(currentJudge)) {
-                Card chosenCard = player.chooseRedAppleCard();
-                redAppleSubmissions.add(chosenCard);
-                player.removeCard(chosenCard);
-            }
-        }
-
-        Collections.shuffle(redAppleSubmissions);
-        gameNotification.setMessage("Red Apple submissions: ");
-        for (Card card : redAppleSubmissions) {
-            gameNotification.setMessage(card.getValue());
-        }
-
-        selectWinner(redAppleSubmissions);
+    // Getter for Current Judge
+    public Player getCurrentJudge() {
+        return currentJudge;
     }
+
+    // Setter for Current Judge
+    public void setCurrentJudge(Player currentJudge) {
+        this.currentJudge = currentJudge;
+    }
+    public void notifyPlayers(String message) {
+        // Logic to notify all players
+        System.out.println(message); // Placeholder for actual notification logic
+    }
+//    private void notifyPlayers(String message) {
+//        NotificationService notificationService = new NotificationService(gameNotification);
+//        notificationService.notify(message);
+//    }
 
     public void startGame() {
-        gameNotification.setMessage("The game has started!");
+        notifyPlayers("********  The game has started! ********");
 
-        while (true) {
-            drawGreenApple();
-            playRedApple();
-            replenishCards();
-
-            if (isGameOver()) break;
-
+        while (!isGameOver()) {
+//            drawGreenApple();
+//            playedRedApple();
+//            replenishCards();
+//            rotateJudge();
+//            playRound();
+            nextPhase();
+        }
+        Player winner = getWinner();
+        notifyPlayers("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
+    }
+//    private void playRound() {
+//        drawGreenApple();
+//        playedRedApple();
+//        replenishCards();
+//        judgeManager.rotateJudge(players, currentJudge);
+//    }
+    private boolean isGameOver() {
+        return players.stream().anyMatch(player -> player.getScore() >= winningGreenApples);
+    }
+    public void nextPhase() {
+        if (currentPhaseIndex < phases.size()) {
+            phases.get(currentPhaseIndex).execute(this);
+            currentPhaseIndex++;
+        } else {
             rotateJudge();
+            System.out.println("Game Over or Round Complete.");
         }
     }
-
-    public void startNewRound() {
-        notifyPlayers("New round has started!");
-        notifyPlayers(currentJudge.getName() + " is the judge now.");
-        drawGreenApple();
+    public void restartPhases() {
+        currentPhaseIndex = 0;  // Reset to first phase
+    }
+    public void drawGreenApple() {
+        JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification);
     }
 
-    public void playersSubmitRedApple(String selectedRedApple) {
-        notifyPlayers("Players submit their red apples.");
+    public void playedRedApple() {
+        List<Card> submissions = submissionManager.collectSubmissions(players);
+        selectWinner(submissions);
+        // Rule: 11 Discard all submitted red apples after judging
+        submissionManager.discardSubmissions(submissions);
     }
 
-    private void selectWinner(List<Card> redAppleSubmissions) {
-        Player judge = currentJudge;
-        Card favoriteRedApple = judge.selectFavoriteRedApple(redAppleSubmissions);
+    public void selectWinner(List<Card> redAppleSubmissions) {
+        judgeManager.selectWinner(redAppleSubmissions, currentJudge, players);
+    }
 
-        gameNotification.setMessage(judge.getName() + " selected: " + favoriteRedApple.getValue());
-
-        for (Player player : players) {
-            if (player.hasSubmitted(favoriteRedApple)) {
-                player.addGreenApple();
-                gameNotification.setMessage(player.getName() + " wins a green apple!");
-                break;
-            }
-        }
+    private Player getWinner() {
+        return players.stream().filter(player -> player.getScore() >= winningGreenApples).findFirst().orElse(null);
     }
 
     public void replenishCards() {
-        for (Player player : players) {
-            while (player.getHand().size() < 7) {
-                Card card = redApplesDeck.remove(0);
-                player.addCard(card);
-            }
-        }
+        int handSizeLimit = GameConfig.getHandSizeLimit();
+        CardReplenisher.replenishAllPlayers(players, redApplesDeck, handSizeLimit);
     }
 
-    public void checkForWinner() {
-        for (Player player : players) {
-            if (player.getScore() >= winningGreenApples) {
-                notifyPlayers(player.getName() + " wins the game!");
-                return;
-            }
-        }
-    }
-
-    private boolean isGameOver() {
-        for (Player player : players) {
-            if (player.getScore() >= winningGreenApples) {
-                gameNotification.setMessage(player.getName() + " has won the game!");
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void rotateJudge() {
-        int currentJudgeIndex = players.indexOf(getJudge());
-        int nextJudgeIndex = (currentJudgeIndex + 1) % players.size();
-        gameNotification.setMessage(players.get(nextJudgeIndex).getName() + " is the new judge.");
-    }
-
-    private Player getJudge() {
-        return players.stream().filter(player -> player.isJudge()).findFirst().orElse(null);
+    // Rotate the judge to the next player
+    public void rotateJudge() {
+        currentJudge = judgeManager.rotateJudge(players, currentJudge);
     }
 
     private void assignJudge() {

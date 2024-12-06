@@ -11,6 +11,9 @@ public class GameNotification implements Subject {
         this.message = message;
         notifyObservers();
     }
+    public String getMessage() {
+        return message;
+    }
 
     @Override
     public void addObserver(Observer observer) {
@@ -20,11 +23,6 @@ public class GameNotification implements Subject {
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers(String message) {
-
     }
 
     @Override

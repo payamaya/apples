@@ -2,7 +2,7 @@ package com.Apples2Apples.card;
 
 public class GreenAppleCard extends Card {
     public GreenAppleCard(String value) {
-        super(value);
+        super(value, CardType.GREEN);
     }
 
     @Override
