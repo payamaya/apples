@@ -2,6 +2,8 @@ package com.Apples2Apples.game;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.common.Constants;
+import com.Apples2Apples.deck.DeckManager;
+import com.Apples2Apples.deck.DeckShuffler;
 import com.Apples2Apples.judging.DefaultJudgingStrategy;
 import com.Apples2Apples.judging.JudgeManager;
 import com.Apples2Apples.judging.NotificationService;
@@ -145,31 +147,16 @@ public class Game {
         // Logic to notify all players
         System.out.println(message); // Placeholder for actual notification logic
     }
-//    private void notifyPlayers(String message) {
-//        NotificationService notificationService = new NotificationService(gameNotification);
-//        notificationService.notify(message);
-//    }
 
     public void startGame() {
         notifyPlayers("********  The game has started! ********");
 
         while (!isGameOver()) {
-//            drawGreenApple();
-//            playedRedApple();
-//            replenishCards();
-//            rotateJudge();
-//            playRound();
             nextPhase();
         }
         Player winner = getWinner();
         notifyPlayers("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
     }
-//    private void playRound() {
-//        drawGreenApple();
-//        playedRedApple();
-//        replenishCards();
-//        judgeManager.rotateJudge(players, currentJudge);
-//    }
     private boolean isGameOver() {
         return players.stream().anyMatch(player -> player.getScore() >= winningGreenApples);
     }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface Judge extends Player{
     Card selectFavoriteRedApple(List<Card> submissions);
+    Card selectRedApple();
 }

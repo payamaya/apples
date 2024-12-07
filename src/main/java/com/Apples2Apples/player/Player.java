@@ -1,39 +1,3 @@
-//package com.Apples2Apples.player;
-//
-//import com.Apples2Apples.card.Card;
-//
-//import java.util.List;
-//
-//public interface Player {
-//    String getName();
-//    boolean canSeeCards();
-//    void setCanSeeCards(boolean canSeeCards);
-//   // void receiveCard(Card card);
-//    int getScore();
-//    void incrementScore();
-//    boolean hasSubmitted(Card card);
-//    List<Card> getHand();
-//    void setHand(List<Card> cards);
-//    void setJudge(boolean isJudge);
-//    boolean isJudge();
-//    Card chooseRedAppleCard();
-////    Card selectFavoriteRedApple(List<Card> submissions);
-//
-//    default void addCard(Card card) {
-//        getHand().add(card);
-//    }
-//
-//    Card selectFavoriteRedApple(List<Card> submissions);
-//
-//    default void removeCard(Card card) {
-//        getHand().remove(card);
-//    }
-//
-//    Card selectRedApple();
-//
-//    void update(String message);
-//}
-//
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
@@ -49,13 +13,10 @@ public interface Player extends Playable {
     void setHand(List<Card> cards);
     List<Card> getHand();
 
-    Card selectFavoriteRedApple(List<Card> submissions);
-
-    Card selectRedApple();
-
+    // General notification update method
     void update(String message);
 
+    // This could be part of the Judge functionality, not every player needs this.
     void setJudge(boolean b);
-
     boolean isJudge();
 }

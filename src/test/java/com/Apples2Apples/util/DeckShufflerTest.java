@@ -2,6 +2,7 @@ package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.RedAppleCard;
+import com.Apples2Apples.deck.DeckShuffler;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

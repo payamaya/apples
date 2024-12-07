@@ -10,12 +10,12 @@ public class PlayerFactory {
         return switch (type) {
             case BOT -> new BotPlayer(name, isJudge);
             case LOCAL -> new HumanPlayer(name);
-//            case ONLINE -> {
-//                if (hand == null) {
-//                    throw new IllegalArgumentException("OnlinePlayer requires a hand of cards.");
-//                }
-//                yield new OnlinePlayer(name, hand, new Socket()); // Provide a valid socket connection
-//            }
+            case ONLINE -> {
+                if (hand == null) {
+                    throw new IllegalArgumentException("OnlinePlayer requires a hand of cards.");
+                }
+                yield new OnlinePlayer(name, hand, new Socket()); // Provide a valid socket connection
+            }
             default -> throw new IllegalArgumentException("Invalid player type.");
         };
     }

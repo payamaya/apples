@@ -2,6 +2,7 @@ package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.RedAppleCard;
+import com.Apples2Apples.deck.DeckManager;
 import com.Apples2Apples.player.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -113,20 +114,20 @@ class PlayerTest implements Player {
         hand.add(card);
     }
 
-    @Override
-    public Card selectFavoriteRedApple(List<Card> submissions) {
-        return null;  // Mock implementation for testing
-    }
+//    @Override
+//    public Card selectFavoriteRedApple(List<Card> submissions) {
+//        return null;  // Mock implementation for testing
+//    }
 
     @Override
     public void removeCard(Card chosenCard) {
         hand.remove(chosenCard);
     }
 
-    @Override
-    public Card selectRedApple() {
-        return null;  // Provide mock implementation if needed
-    }
+//    @Override
+//    public Card selectRedApple() {
+//        return null;  // Provide mock implementation if needed
+//    }
 
     @Override
     public void update(String message) {
