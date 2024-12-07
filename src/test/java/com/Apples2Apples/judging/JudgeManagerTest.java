@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JudgeManagerTest {
     private JudgeManager judgeManager;
@@ -61,5 +61,27 @@ class JudgeManagerTest {
         judgeManager.selectWinner(redAppleSubmissions, judge, players);
         assertEquals("No red apple submissions available.", gameNotification.getMessage());
     }
+    @Test
+    void testRotateJudge() {
+        Player initialJudge = judge;
+        Player nextJudge = judgeManager.rotateJudge(players, initialJudge);
 
+        // Verify the judge rotation
+        assertEquals(players.get(0), nextJudge, "The next judge should be Player 0.");
+        assertFalse(initialJudge.isJudge(), "The initial judge should no longer be the judge.");
+        assertTrue(nextJudge.isJudge(), "The new judge should have judge status.");
+        assertEquals("Player0 is the new judge.", gameNotification.getMessage());
+    }
+
+    @Test
+    void testRotateJudgeWithSinglePlayer() {
+        players.clear();
+        players.add(judge); // Only one player (the judge)
+
+        Player nextJudge = judgeManager.rotateJudge(players, judge);
+
+        // Verify that the single player remains the judge
+        assertEquals(judge, nextJudge, "The judge should remain the same with a single player.");
+        assertTrue(nextJudge.isJudge(), "The single player should retain judge status.");
+    }
 }
