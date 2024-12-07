@@ -2,6 +2,7 @@ package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.RedAppleCard;
+import com.Apples2Apples.card.RedAppleSubmissionManager;
 import com.Apples2Apples.player.Player;
 import com.Apples2Apples.player.BotPlayer;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,7 @@
 package com.Apples2Apples.game;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.card.RedAppleSubmissionManager;
 import com.Apples2Apples.common.Constants;
 import com.Apples2Apples.deck.DeckManager;
 import com.Apples2Apples.deck.DeckShuffler;
@@ -14,6 +15,7 @@ import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.phases.GamePhase;
 import com.Apples2Apples.player.*;
 import com.Apples2Apples.util.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
