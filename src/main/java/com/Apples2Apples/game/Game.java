@@ -42,7 +42,8 @@ public class Game {
     private static final LoggerUtil logger = LoggerUtil.getInstance(Game.class);
     private final RedAppleSubmissionManager submissionManager = new RedAppleSubmissionManager();
     private final DeckManager deckManager;
-
+    private PlayerManager playerManager;
+    
     /**
      * Creates a new Game instance with the provided players, table size, and server factory.
      *
@@ -66,7 +67,8 @@ public class Game {
         redApplesDeck = loadRedAppleDeck();
         winningGreenApples = TabelSizeUtil.determineWinningGreenApples(players.size());
         judgeManager = new JudgeManager(new DefaultJudgingStrategy(), new NotificationService(gameNotification));
-
+        playerManager = new PlayerManager();
+        
         shuffleDecks();
         addBotPlayersIfNeeded(tableSize);
         dealInitialCards();
@@ -101,18 +103,14 @@ public class Game {
         DeckShuffler.shuffleDeck(redApplesDeck);
     }
 
+    /**
+     * Ensures the game has the correct number of players by adding bot players if needed.
+     *
+     * @param tableSize the desired number of players for the game
+     */
     public void addBotPlayersIfNeeded(int tableSize) {
-        int currentSize = players.size();
-        if (currentSize < tableSize) {
-            int botsToAdd = tableSize - currentSize;
-            for (int i = 0; i < botsToAdd; i++) {
-                String botName = "Bot" + (currentSize + i + 1);
-                Player botPlayer = PlayerFactory.createPlayer(PlayerType.BOT, botName, new ArrayList<>(), false);
-                players.add(botPlayer);
-            }
-        }
+        playerManager.addBotPlayersIfNeeded(players, tableSize);  // Delegate to PlayerManager
     }
-
 
     // Use the DeckManager to deal initial cards to players
     private void dealInitialCards() {
