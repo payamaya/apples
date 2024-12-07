@@ -1,25 +1,17 @@
 /**
- * The `com.Apples2Apples.player` package contains classes and interfaces related to players
- * in the Apples to Apples game. It defines the core functionality for player actions,
- * including selecting cards, submitting red apples, and keeping track of scores.
+ * Package com.Apples2Apples.player
  *
- * <p>This package follows the Factory design pattern to dynamically create instances of different
- * types of players (e.g., LocalPlayer, BotPlayer, OnlinePlayer). The Factory pattern allows for
- * flexibility in generating various types of players based on different contexts or game modes.</p>
+ * This package contains the core abstractions and implementations for players in the game,
+ * including human, bot, and local players. The factory pattern is used to dynamically create players,
+ * and responsibilities like managing hands and judging are distributed based on the SOLID principles.
  *
- * <p>The main components of this package include:</p>
- * <ul>
- *     <li>{@link Player} - An abstract class representing a generic player.</li>
- *     <li>{@link LocalPlayer}, {@link BotPlayer}, {@link OnlinePlayer} - Concrete implementations
- *         representing different types of players.</li>
- *     <li>{@link Hand} - A class representing the player's hand of cards.</li>
- *     <li>{@link CardChooser} - An interface defining the method for selecting cards.</li>
- * </ul>
+ * Design Patterns:
+ * - Factory: Used for player creation.
+ * - Strategy (Partial): Behavior like card selection varies across player types.
+ * - Observer: Handles player notifications.
  *
- * <p>The Factory pattern is used to instantiate the appropriate player type based on the game's
- * context. This ensures that the game logic can easily accommodate both human players and automated
- * bot players, as well as players from different platforms (local or online).</p>
- *
- * @since 1.0
+ * Future Modifications:
+ * The design allows for the introduction of new player types (e.g., online players) and
+ * extensible game mechanics with minimal changes to existing code.
  */
 package com.Apples2Apples.player;

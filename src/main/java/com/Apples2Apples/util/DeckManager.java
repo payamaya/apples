@@ -20,7 +20,4 @@ public class DeckManager {
             player.addCard(deck.removeFirst());  // Deal the card from the top of the deck
         }
     }
-//    public void shuffleDeck(List<Card> deck, DeckShuffleStrategy shuffleStrategy) {
-//        shuffleStrategy.shuffle(deck);
-//    }
 }

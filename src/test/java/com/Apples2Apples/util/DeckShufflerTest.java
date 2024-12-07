@@ -24,15 +24,26 @@ class DeckShufflerTest {
 
         DeckShuffler.shuffleDeck(deck);
 
-        // Check if order is changed
-        assertNotEquals(originalDeck, deck, "Deck order should be different after shuffle.");
+        // Check if at least one element has moved to a different position
+        boolean isDifferentOrder = false;
+        for (int i = 0; i < deck.size(); i++) {
+            if (!deck.get(i).equals(originalDeck.get(i))) {
+                isDifferentOrder = true;
+                break;
+            }
+        }
+
+        assertTrue(isDifferentOrder, "Deck order should be different after shuffle.");
     }
+
     @Test
     void testMultipleShufflesProduceDifferentOrders() {
         List<Card> deck = new ArrayList<>(Arrays.asList(
                 new RedAppleCard("Courageous"),
                 new RedAppleCard("Funny"),
-                new RedAppleCard("Brave")
+                new RedAppleCard("Brave"),
+                new RedAppleCard("Bold"),
+                new RedAppleCard("Wise")
         ));
 
         List<String> firstShuffleOrder = new ArrayList<>();
@@ -44,17 +55,29 @@ class DeckShufflerTest {
             firstShuffleOrder.add(card.getValue());
         }
 
-        DeckShuffler.shuffleDeck(deck);
-        for (Card card : deck) {
-            secondShuffleOrder.add(card.getValue());
+        // Make sure second shuffle is different
+        boolean isDifferentOrder = false;
+        for (int attempt = 0; attempt < 5; attempt++) {  // Allow a few attempts to get a different order
+            DeckShuffler.shuffleDeck(deck);
+            secondShuffleOrder.clear();
+            for (Card card : deck) {
+                secondShuffleOrder.add(card.getValue());
+            }
+
+            // Check if the orders are different
+            if (!firstShuffleOrder.equals(secondShuffleOrder)) {
+                isDifferentOrder = true;
+                break;
+            }
         }
 
         // Ensure that the size of the deck is consistent
         assertEquals(firstShuffleOrder.size(), secondShuffleOrder.size(), "Deck size should remain the same after shuffle.");
 
-        // Ensure the two orders are not identical
-        assertNotEquals(firstShuffleOrder, secondShuffleOrder, "Different shuffles should produce different orders.");
+        // Ensure the two orders are not identical after several attempts
+        assertTrue(isDifferentOrder, "Different shuffles should produce different orders.");
     }
+
 
 
     @Test

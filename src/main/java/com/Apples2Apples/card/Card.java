@@ -24,11 +24,12 @@ public abstract class Card {
     }
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;  // Same object reference
-        if (obj == null || getClass() != obj.getClass()) return false;  // Check for null or different class
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Card card = (Card) obj;
-        return value != null && value.equals(card.value);  // Compare based on the value field (or change this as needed)
+        return value.equals(card.value) && cardType == card.cardType;  // Include cardType if necessary
     }
+
 
     @Override
     public int hashCode() {

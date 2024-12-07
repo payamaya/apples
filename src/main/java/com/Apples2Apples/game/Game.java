@@ -10,12 +10,10 @@ import com.Apples2Apples.networking.INetworkServer;
 import com.Apples2Apples.networking.IServerFactory;
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.phases.GamePhase;
-import com.Apples2Apples.player.Hand;
-import com.Apples2Apples.player.Player;
-import com.Apples2Apples.player.PlayerFactory;
-import com.Apples2Apples.player.PlayerType;
+import com.Apples2Apples.player.*;
 import com.Apples2Apples.util.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -104,14 +102,13 @@ public class Game {
         if (currentSize < tableSize) {
             int botsToAdd = tableSize - currentSize;
             for (int i = 0; i < botsToAdd; i++) {
-                String botName = "Bot" + (i + 1);
-                Player botPlayer = PlayerFactory.createPlayer(PlayerType.BOT, botName, null, new Hand().getCards(), false);
+                String botName = "Bot" + (currentSize + i + 1);
+                Player botPlayer = PlayerFactory.createPlayer(PlayerType.BOT, botName, new ArrayList<>(), false);
                 players.add(botPlayer);
-                // If bot, ensure they can't see cards
-                botPlayer.setCanSeeCards(false);
             }
         }
     }
+
 
     // Use the DeckManager to deal initial cards to players
     private void dealInitialCards() {
@@ -200,8 +197,13 @@ public class Game {
     }
 
     public void selectWinner(List<Card> redAppleSubmissions) {
-        judgeManager.selectWinner(redAppleSubmissions, currentJudge, players);
+        if (currentJudge instanceof Judge) {
+            judgeManager.selectWinner(redAppleSubmissions, (Judge) currentJudge, players);
+        } else {
+            throw new IllegalStateException("Current judge is not of type Judge.");
+        }
     }
+
 
     private Player getWinner() {
         return players.stream().filter(player -> player.getScore() >= winningGreenApples).findFirst().orElse(null);

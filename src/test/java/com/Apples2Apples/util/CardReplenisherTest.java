@@ -27,7 +27,7 @@ class CardReplenisherTest {
         redApplesDeck = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            players.add(new BotPlayer("Player" + i, false));
+            players.add(new BotPlayer("Player" + i, false)); // Provide an empty list of cards
         }
 
         for (int i = 0; i < 28; i++) {
@@ -36,6 +36,7 @@ class CardReplenisherTest {
 
         GameConfig.setHandSizeLimit(HAND_SIZE_LIMIT);
     }
+
 
     @Test
     void testReplenishAllPlayers() {

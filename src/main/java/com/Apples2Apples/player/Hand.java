@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Hand {
-    private List<Card> cards;
+    private final List<Card> cards;
 
     public Hand() {
         this.cards = new ArrayList<>();
@@ -15,16 +15,26 @@ public class Hand {
         cards.add(card);
     }
 
+    public void removeCard(Card card) {
+        cards.remove(card);
+    }
+
+    public boolean contains(Card card) {
+        return cards.contains(card);
+    }
+
     public List<Card> getCards() {
-        return cards;
+        return new ArrayList<>(cards);
     }
 
     public int size() {
         return cards.size();
     }
 
-    public Card get(int i) {
-        return cards.get(i);
+    public Card get(int index) {
+        return cards.get(index);
     }
 
+    public void setCards(List<Card> cards) {
+    }
 }

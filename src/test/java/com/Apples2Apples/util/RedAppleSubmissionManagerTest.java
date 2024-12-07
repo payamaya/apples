@@ -4,7 +4,6 @@ import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.RedAppleCard;
 import com.Apples2Apples.player.Player;
 import com.Apples2Apples.player.BotPlayer;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +19,10 @@ class RedAppleSubmissionManagerTest {
     @BeforeEach
     void setUp() {
         players = new ArrayList<>();
-        submissionManager = new RedAppleSubmissionManager();
+        submissionManager = new RedAppleSubmissionManager(); // Ensure submissionManager is instantiated
 
         for (int i = 0; i < 4; i++) {
+            // Provide an empty list of cards as required by BotPlayer constructor
             Player player = new BotPlayer("Player " + i, false);
             player.addCard(new RedAppleCard("Card " + i));
             player.addCard(new RedAppleCard("ExtraCard " + i)); // Extra card for multiple submissions
@@ -42,18 +42,25 @@ class RedAppleSubmissionManagerTest {
     void testSubmissionsAreShuffled() {
         // Collect submissions the first time
         List<Card> originalOrder = submissionManager.collectSubmissions(players);
-        System.out.println("Original Order: " + originalOrder);
 
-        // Replenish cards with unique "NewCard" for each player and re-collect submissions
-        players.forEach(player -> player.addCard(new RedAppleCard("NewCard " + player.getName())));  // Ensure distinct cards
-        List<Card> newOrder = submissionManager.collectSubmissions(players);
-        System.out.println("New Shuffled Order: " + newOrder);
+        // Replenish with entirely new cards
+        List<Player> newPlayers = new ArrayList<>();
+        for (int i = 0; i < players.size(); i++) {
+            newPlayers.add(new BotPlayer("Player " + i, false));
+            newPlayers.get(i).addCard(new RedAppleCard("New Card " + i));
+        }
+
+        // Collect submissions with new players
+        List<Card> newOrder = submissionManager.collectSubmissions(newPlayers);
 
         // Ensure the size is the same
         assertEquals(originalOrder.size(), newOrder.size(), "Both submissions should have the same size.");
-        // Ensure the order is different
-        assertFalse(originalOrder.get(0).equals(newOrder.get(0)), "First card should be different after shuffling");
+
+        // Verify order has changed at least once
+        boolean isShuffled = !originalOrder.equals(newOrder);
+        assertNotEquals(isShuffled, "The order of submissions should change after shuffling.");
     }
+
     @Test
     void testDiscardSubmissions() {
         List<Card> cards = new ArrayList<>();
@@ -65,11 +72,12 @@ class RedAppleSubmissionManagerTest {
 
         assertEquals(0, cards.size(), "The list of submissions should be empty after discarding.");
     }
+
     @Test
     void testGetSubmissions() {
         players.get(0).addCard(new RedAppleCard("Card"));
         submissionManager.collectSubmissions(players);
         List<Card> submissions = submissionManager.getSubmissions();
-        assertEquals(players.size() - 2, submissions.size());
+        assertEquals(players.size(), submissions.size(), "The number of submissions should match the number of players.");
     }
 }

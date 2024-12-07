@@ -1,6 +1,5 @@
 package com.Apples2Apples.util;
 
-import com.Apples2Apples.judging.NotificationService;
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.player.Player;
 import java.util.List;

@@ -21,12 +21,15 @@ class JudgeSelectorTest {
     void setUp() {
         players = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
+            // Provide an empty list of cards as required by BotPlayer constructor
             players.add(new BotPlayer("BotPlayer" + i, true));
         }
 
         gameNotification = new GameNotification(); // Real object
         judgeSelector = new JudgeSelector(gameNotification);
     }
+
+
 
     @Test
     void testRandomJudgeSelectionAndNotification() {

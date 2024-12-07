@@ -2,8 +2,8 @@ package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.GreenAppleCard;
-import com.Apples2Apples.card.RedAppleCard;
 import com.Apples2Apples.observer.GameNotification;
+import com.Apples2Apples.observer.Observer;
 import com.Apples2Apples.player.Player;
 import com.Apples2Apples.player.BotPlayer;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,9 +25,13 @@ class JudgeUtilTest {
         greenApplesDeck.add(new GreenAppleCard("Fresh"));
 
         gameNotification = new GameNotification();
+        // Provide an empty list of cards as required by BotPlayer constructor
         Player judge = new BotPlayer("JudgeBot", true);
-        gameNotification.addObserver(judge);
+        gameNotification.addObserver((Observer) judge);
     }
+
+
+
 
     @Test
     void testDrawGreenApple() {

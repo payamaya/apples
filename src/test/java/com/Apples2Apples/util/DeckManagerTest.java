@@ -2,7 +2,6 @@ package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.RedAppleCard;
-import com.Apples2Apples.player.Hand;
 import com.Apples2Apples.player.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class DeckManagerTest {
 
         // Use a mock Player subclass
         for (int i = 0; i < 4; i++) {
-            players.add(new PlayerTest("Player" + i, new Hand()));  // Mock player for testing
+            players.add(new PlayerTest("Player" + i));  // Mock player for testing
         }
 
         redApplesDeck = new ArrayList<>();
@@ -44,41 +43,93 @@ class DeckManagerTest {
         assertEquals(30 - (4 * 7), redApplesDeck.size(), "Remaining deck size should be correct.");
     }
 }
-// Mock Player class for testing purposes
- class PlayerTest extends Player {
-    public PlayerTest(String name, Hand hand) {
-        super(name);
+class PlayerTest implements Player {
+    private String name;
+    private List<Card> hand;
+    private boolean canSeeCards;
+
+    public PlayerTest(String name) {
+        this.name = name;
+        this.hand = new ArrayList<>();
     }
 
     @Override
-    public Card chooseCard() {
-        return null;
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public boolean canSeeCards() {
+        return canSeeCards;
+    }
+
+    @Override
+    public void setCanSeeCards(boolean canSeeCards) {
+        this.canSeeCards = canSeeCards;
+    }
+
+    @Override
+    public int getScore() {
+        return 0;  // Implement if needed
+    }
+
+    @Override
+    public void incrementScore() {
+        // Implement if needed
+    }
+
+    @Override
+    public boolean hasSubmitted(Card card) {
+        return hand.contains(card);
+    }
+
+    @Override
+    public List<Card> getHand() {
+        return hand;
+    }
+
+    @Override
+    public void setHand(List<Card> cards) {
+        this.hand = cards;
+    }
+
+    @Override
+    public void setJudge(boolean isJudge) {
+        // Implement if needed
+    }
+
+    @Override
+    public boolean isJudge() {
+        return false; // Implement if needed
     }
 
     @Override
     public Card chooseRedAppleCard() {
-        return null;
+        return null;  // Mock implementation for testing
+    }
+
+    @Override
+    public void addCard(Card card) {
+        hand.add(card);
+    }
+
+    @Override
+    public Card selectFavoriteRedApple(List<Card> submissions) {
+        return null;  // Mock implementation for testing
     }
 
     @Override
     public void removeCard(Card chosenCard) {
-    }
-
-    @Override
-    public Card selectFavoriteRedApple(List<Card> redAppleSubmissions) {
-        return null;
-    }
-
-
-    public boolean hasSubmitted(Card favoriteRedApple) {
-        return false;
+        hand.remove(chosenCard);
     }
 
     @Override
     public Card selectRedApple() {
-        return null;  // Provide a mock implementation, as it’s required
+        return null;  // Provide mock implementation if needed
     }
-     public void update(String message) {
 
-     }
+    @Override
+    public void update(String message) {
+        // Provide mock update method for observer pattern if needed
+    }
 }

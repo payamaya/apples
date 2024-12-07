@@ -1,100 +1,124 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.observer.Observer;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
-public class BotPlayer extends Player  {
+public class BotPlayer extends AbstractPlayer implements Judge, Observer {
+    private boolean isJudge;
 
-    public BotPlayer(String name, boolean canSeeCards) {
+    public BotPlayer(String name, boolean isJudge) {
         super(name);
-        this.setCanSeeCards(canSeeCards);
+        this.isJudge = isJudge;
     }
 
     @Override
     public Card chooseRedAppleCard() {
-        Random random = new Random();
-        List<Card> cards = handManager.getCards(); 
-        if (cards.isEmpty()) {
-            System.out.println(name + " has no cards to choose from.");
-            return null;
-        }
-        Card chosenCard = cards.get(random.nextInt(cards.size()));
-        handManager.removeCard(chosenCard);  // Remove the chosen card from hand
-        return chosenCard;
+        // Bot selects a random card from the hand
+        return getRandomCard(getHand());  // Using getHand() to access the player's hand
     }
 
     @Override
-    public Card chooseCard() {
-        return chooseRedAppleCard();  // Delegate to the random chooser logic
+    public boolean canSeeCards() {
+        return false;  // Bots can't see others' cards
     }
 
+    @Override
+    public void setCanSeeCards(boolean canSeeCards) {
+        // No implementation needed for the bot
+    }
+
+    @Override
+    public Card selectFavoriteRedApple(List<Card> submissions) {
+        return getRandomCard(submissions); // Bot selects a random card from the submissions
+    }
+
+    @Override
+    public Card selectRedApple() {
+        return null;  // Bot doesn't participate in selecting the red apple
+    }
+
+    @Override
+    public void update(String message) {
+        // Optionally, log the update or handle it as needed
+    }
+
+    @Override
+    public void setJudge(boolean isJudge) {
+        this.isJudge = isJudge;
+    }
+
+    @Override
+    public boolean isJudge() {
+        return isJudge;
+    }
+
+    // Utility method for selecting a random card
+    private Card getRandomCard(List<Card> cards) {
+        if (cards == null || cards.isEmpty()) {
+            return null;
+        }
+        Random random = new Random();
+        return cards.get(random.nextInt(cards.size()));
+    }
+}
+
+//public class BotPlayer extends AbstractPlayer implements Judgeable, Observer {
+//    private boolean isJudge;
+//
+//    public BotPlayer(String name, boolean isJudge) {
+//        super(name);
+//        this.isJudge = isJudge;
+//    }
+//
+//    @Override
+//    public Card chooseRedAppleCard() {
+//        return getRandomCard(hand.getCards());
+//    }
+//
+//    @Override
+//    public boolean canSeeCards() {
+//        return false;
+//    }
+//
+//    @Override
+//    public void setCanSeeCards(boolean canSeeCards) {
+//
+//    }
+//
 //    @Override
 //    public Card selectRedApple() {
-//        List<Card> cards = handManager.getCards();  // Use HandManager
-//        if (cards.isEmpty()) {
-//            System.out.println(name + " has no cards to choose from.");
+//        return null;
+//    }
+//
+//    @Override
+//    public void update(String message) {
+//        System.out.println("BotPlayer " + getName() + " received message: " + message);
+//    }
+//
+//    @Override
+//    public void setJudge(boolean isJudge) {
+//        this.isJudge = isJudge;
+//    }
+//
+//    @Override
+//    public boolean isJudge() {
+//        return isJudge;
+//    }
+//
+//    @Override
+//    public Card selectFavoriteRedApple(List<Card> submissions) {
+//        return getRandomCard(submissions);
+//    }
+//
+//    // Utility method for selecting a random card
+//    private Card getRandomCard(List<Card> cards) {
+//        if (cards == null || cards.isEmpty()) {
 //            return null;
 //        }
-//
-//        Scanner scanner = new Scanner(System.in);
-//        int choice = -1;
-//
-//        while (choice < 1 || choice > cards.size()) {
-//            try {
-//                System.out.println(name + ", choose a red apple (1-" + cards.size() + "): ");
-//                choice = scanner.nextInt();
-//
-//                if (choice < 1 || choice > cards.size()) {
-//                    System.out.println("Invalid choice. Please select a valid card.");
-//                }
-//            } catch (InputMismatchException e) {
-//                System.out.println("Invalid input. Please enter a number.");
-//                scanner.next(); // Clear invalid input
-//            }
-//        }
-//
-//        return cards.get(choice - 1);  // Adjust for 0-based index
+//        Random random = new Random();
+//        return cards.get(random.nextInt(cards.size()));
 //    }
-@Override
-public Card selectRedApple() {
-    List<Card> cards = handManager.getCards();  // Use HandManager
-    if (cards.isEmpty()) {
-        System.out.println(name + " has no cards to choose from.");
-        return null;
-    }
-    Random random = new Random();
-    return cards.get(random.nextInt(cards.size()));  // Randomly choose a card
-}
-
-    @Override
-    public Card selectFavoriteRedApple(List<Card> redAppleCards) {
-        if (redAppleCards == null || redAppleCards.isEmpty()) {
-            System.out.println("No red apple cards to choose from.");
-            return null;
-        }
-
-        Random random = new Random();
-        return redAppleCards.get(random.nextInt(redAppleCards.size()));
-    }
-
-    @Override
-    public void removeCard(Card chosenCard) {
-        if (chosenCard == null) {
-            System.out.println("Error: Chosen card is null.");
-            return;
-        }
-
-        handManager.removeCard(chosenCard);  // Use HandManager
-        System.out.println(name + " has removed the card: " + chosenCard);
-    }
-
-    @Override
-    public boolean hasSubmitted(Card favoriteRedApple) {
-        return handManager.getCards().contains(favoriteRedApple);
-    }
-
-}
+//}
