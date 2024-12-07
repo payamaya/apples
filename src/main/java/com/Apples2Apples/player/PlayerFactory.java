@@ -4,7 +4,10 @@ import com.Apples2Apples.card.Card;
 
 import java.net.Socket;
 import java.util.List;
-
+/**
+ * PlayerFactory is responsible for creating player instances based on the type of player required for the game.
+ * It uses the **Factory Pattern** to create different types of players, such as Bot, Human, and Online players.
+ */
 public class PlayerFactory {
     public static Player createPlayer(PlayerType type, String name, List<Card> hand, boolean isJudge) {
         return switch (type) {

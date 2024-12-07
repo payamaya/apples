@@ -1,12 +1,15 @@
 package com.Apples2Apples.card;
 
-import com.Apples2Apples.card.Card;
 import com.Apples2Apples.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Manages the collection, randomization, and discarding of red apple card submissions
+ * during the game. Ensures that only non-judge players submit cards.
+ */
 public class RedAppleSubmissionManager {
     private final List<Card> submissions = new ArrayList<>();
 

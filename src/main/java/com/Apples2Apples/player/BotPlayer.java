@@ -5,7 +5,11 @@ import com.Apples2Apples.observer.Observer;
 
 import java.util.List;
 import java.util.Random;
-
+/**
+ * BotPlayer represents an automated player in the game. It implements the **Observer Pattern** to listen for game updates
+ * and makes decisions based on random card selection.
+ * It can also act as a judge if needed, deciding which red apple card is favored.
+ */
 public class BotPlayer extends AbstractPlayer implements Judge, Observer {
     private boolean isJudge;
 

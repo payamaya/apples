@@ -4,6 +4,10 @@ import com.Apples2Apples.card.Card;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Hand represents a player's collection of cards.
+ * It provides methods to manage the cards, including adding, removing, and checking if a card exists in the hand.
+ */
 public class Hand {
     private final List<Card> cards;
 

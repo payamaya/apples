@@ -39,7 +39,5 @@
  * Future Modifications:
  * The current design allows easy addition of new player types (e.g., OnlinePlayer, AIPlayer), game mechanics,
  * and customizations (e.g., different card selection strategies) with minimal changes to existing code.
- *
  */
-
 package com.Apples2Apples.player;

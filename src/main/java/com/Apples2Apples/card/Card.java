@@ -1,6 +1,10 @@
 package com.Apples2Apples.card;
 
-
+/**
+ * An abstract representation of a card in the Apples to Apples game.
+ * Cards have a value, a type (red or green), and a description.
+ * This serves as the base class for specific card types.
+ */
 public abstract class Card {
     protected String value;
     private final CardType cardType;

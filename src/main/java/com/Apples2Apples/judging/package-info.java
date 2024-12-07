@@ -1,23 +1,68 @@
 /**
- * This package (`com.Apples2Apples.judging`) defines the core components
- * related to judging mechanics in the Apples2Apples game. It provides classes
- * and interfaces for selecting winning cards and managing judge interactions.
+ * The {@code com.Apples2Apples.judging} package defines core components
+ * related to the judging mechanics in the Apples to Apples game. This package
+ * enables flexible and extendable judging processes by providing interfaces
+ * and classes for managing judges, selecting winning cards, and sending notifications.
  *
- * The key components include:
+ * <h2>Responsibilities</h2>
+ * <ul>
+ *   <li>Defining strategies for judging and selecting winning cards.</li>
+ *   <li>Managing the judge rotation process during gameplay.</li>
+ *   <li>Sending notifications to players regarding the game's progress.</li>
+ * </ul>
  *
- *  * **JudgingStrategy:** This interface defines a contract for selecting a
- *    winning card from a list of red apple card submissions. Concrete implementations
- *    can define different judging algorithms.
- *  * **DefaultJudgingStrategy:** This class implements the `JudgingStrategy`
- *    interface by delegating the selection of the winning card to the judge's
- *    logic (`Player.selectFavoriteRedApple`).
- *  * **JudgeManager:** This class manages the judging process. It takes a
- *    `JudgingStrategy` and a `NotificationService` as dependencies
- *    during construction. It provides a `selectWinner` method that handles
- *    selecting a winning card, notifying the players, and potentially tracking
- *    card submissions (implementation detail).
- *  * **NotificationService:** This class provides functionalities for sending
- *    game notifications. It injects a `GameNotification` dependency during
- *    construction and exposes a `notify` method to send messages.
+ * <h2>Key Classes and Interfaces</h2>
+ * <ul>
+ *   <li>{@link com.Apples2Apples.judging.JudgingStrategy}:
+ *       An interface that defines the contract for selecting a favorite card.
+ *   </li>
+ *   <li>{@link com.Apples2Apples.judging.DefaultJudgingStrategy}:
+ *       Implements the {@code JudgingStrategy} by delegating the selection process to the judge's logic.
+ *   </li>
+ *   <li>{@link com.Apples2Apples.judging.JudgeManager}:
+ *       Manages the judging process, including selecting winners and rotating the judge role.
+ *   </li>
+ *   <li>{@link com.Apples2Apples.judging.NotificationService}:
+ *       Provides functionality to send notifications during the game by utilizing the {@code GameNotification} class.
+ *   </li>
+ * </ul>
+ *
+ * <h2>Design Patterns</h2>
+ * <ul>
+ *   <li><b>Strategy Pattern:</b> The {@code JudgingStrategy} interface and its
+ *       implementations allow for flexible judging algorithms.
+ *   </li>
+ *   <li><b>Dependency Injection:</b> The {@code JudgeManager} and {@code NotificationService}
+ *       classes use constructor injection to achieve loose coupling and testability.
+ *   </li>
+ * </ul>
+ *
+ * <h2>Usage</h2>
+ * <p>Example of how to use the judging components:</p>
+ * <pre>{@code
+ * // Initialize the judging components
+ * JudgingStrategy judgingStrategy = new DefaultJudgingStrategy();
+ * GameNotification gameNotification = new GameNotification();
+ * NotificationService notificationService = new NotificationService(gameNotification);
+ * JudgeManager judgeManager = new JudgeManager(judgingStrategy, notificationService);
+ *
+ * // Simulate judging process
+ * List<Card> redAppleSubmissions = ...; // Cards submitted by players
+ * Judge currentJudge = ...; // Current judge
+ * List<Player> players = ...; // All players
+ *
+ * // Select the winner
+ * judgeManager.selectWinner(redAppleSubmissions, currentJudge, players);
+ *
+ * // Rotate the judge
+ * Player nextJudge = judgeManager.rotateJudge(players, currentJudge);
+ * }</pre>
+ *
+ * <h2>Future Extensions</h2>
+ * <ul>
+ *   <li>Adding advanced judging strategies, such as AI-based selection algorithms.</li>
+ *   <li>Integrating a scoring system for submitted cards.</li>
+ *   <li>Enhancing notifications with more detailed feedback and animations.</li>
+ * </ul>
  */
 package com.Apples2Apples.judging;

@@ -9,10 +9,14 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**
+ * OnlinePlayer represents a player connected to an online game.
+ * It uses a socket connection for communication and implements the **Observer Pattern**.
+ */
 public class OnlinePlayer extends AbstractPlayer {
     private static final Logger logger = Logger.getLogger(HumanPlayer.class.getName());
     private boolean isJudge;
-    
+
     private final Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;

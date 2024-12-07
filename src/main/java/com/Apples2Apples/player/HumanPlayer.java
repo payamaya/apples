@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**
+ * HumanPlayer represents a player controlled by a human. This player interacts with the game via the console to
+ * select red apple cards and favorite red apples from submissions.
+ * Implements **Observer Pattern** to receive updates about the game state.
+ */
 public class HumanPlayer extends AbstractPlayer implements Judge {
     private static final Logger logger = Logger.getLogger(HumanPlayer.class.getName());
     private boolean isJudge;

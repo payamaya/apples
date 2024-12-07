@@ -1,11 +1,14 @@
 package com.Apples2Apples.deck;
 
-
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.player.Player;
 
 import java.util.List;
 
+/**
+ * Manages card dealing operations in the Apples to Apples game.
+ * Responsible for assigning cards to players from the red apple deck.
+ */
 public class DeckManager {
 
     // Deals cards to each player based on hand size

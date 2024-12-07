@@ -35,18 +35,7 @@ public class Main {
 
 //        // Initialize network factory
 //    IServerFactory serverFactory = new TCPServerFactory();
-//
-//    // Define the game phases
-//    List<GamePhase> gamePhases = new ArrayList<>();
-//    gamePhases.add(new DrawGreenApplePhase());
-//    gamePhases.add(new SubmitRedApplePhase());
-//    gamePhases.add(new JudgePhase());
-//    gamePhases.add(new ReplenishHandPhase());
-//    gamePhases.add(new RotateJudgePhase()); // Adding the RotateJudgePhase here
-//
-//    // Create and start the game
-//    Game game = new Game(players, numPlayers, serverFactory, gamePhases);
-//    game.startGame();
+
         Game game = new Game(players, numPlayers, new TCPServerFactory(), List.of(
                 new DrawGreenApplePhase(),
                 new SubmitRedApplePhase(),

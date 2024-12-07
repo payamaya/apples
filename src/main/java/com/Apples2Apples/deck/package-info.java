@@ -1,65 +1,49 @@
 /**
- * The {@code com.Apples2Apples.deck} package contains classes and interfaces
- * for managing the game's card decks. This package is responsible for:
+ * The {@code com.Apples2Apples.deck} package manages the game's card decks,
+ * including shuffling, dealing cards, and supporting custom shuffle strategies.
  *
+ * <h2>Responsibilities</h2>
  * <ul>
- *   <li>Shuffling card decks using customizable strategies.</li>
- *   <li>Dealing cards to players during gameplay.</li>
- *   <li>Providing flexible and extendable mechanisms for deck management.</li>
+ *   <li>Shuffling card decks using default or custom strategies.</li>
+ *   <li>Dealing cards to players based on predefined hand sizes.</li>
+ *   <li>Providing extendable mechanisms for deck operations.</li>
  * </ul>
  *
- * <h2>Classes in this Package</h2>
+ * <h2>Key Classes</h2>
  * <ul>
- *   <li>
- *     {@link com.Apples2Apples.deck.DeckManager}: Handles the distribution of cards to players,
- *     ensuring each player receives the correct number of cards.
- *   </li>
- *   <li>
- *     {@link com.Apples2Apples.deck.DeckShuffler}: Provides a utility method for shuffling decks
- *     using the default shuffle algorithm.
- *   </li>
- *   <li>
- *     {@link com.Apples2Apples.deck.DeckShuffleStrategy}: Defines a functional interface to enable
- *     custom shuffle strategies for decks.
- *   </li>
- *   <li>
- *     {@link com.Apples2Apples.deck.DefaultDeckShuffler}: Implements the {@code DeckShuffleStrategy}
- *     interface using the standard shuffle algorithm from the
- *     {@code java.util.Collections} class.
- *   </li>
+ *   <li>{@link com.Apples2Apples.deck.DeckManager}: Manages card distribution to players during gameplay.</li>
+ *   <li>{@link com.Apples2Apples.deck.DeckShuffler}: Provides a utility method for shuffling card decks.</li>
+ *   <li>{@link com.Apples2Apples.deck.DeckShuffleStrategy}: Defines a functional interface for implementing custom shuffle algorithms.</li>
+ *   <li>{@link com.Apples2Apples.deck.DefaultDeckShuffler}: Implements the default shuffle strategy using {@code Collections.shuffle()}.</li>
  * </ul>
  *
- * <h2>Design Patterns Used</h2>
+ * <h2>Design Patterns</h2>
  * <ul>
- *   <li>
- *     <b>Strategy Pattern</b>: Enables the use of different shuffle strategies
- *     by decoupling the shuffle algorithm from the deck management logic.
- *   </li>
- *   <li>
- *     <b>Single Responsibility Principle (SRP)</b>: Ensures that each class
- *     in this package has a focused responsibility, making the codebase easier
- *     to maintain and extend.
- *   </li>
+ *   <li><b>Strategy Pattern:</b> Allows flexibility in shuffle algorithms.</li>
+ *   <li><b>Single Responsibility Principle (SRP):</b> Ensures each class focuses on a single task (e.g., shuffling or dealing cards).</li>
  * </ul>
  *
  * <h2>Usage</h2>
- * <p>To shuffle a deck, use the {@code DeckShuffler} utility for default shuffling
- * or provide a custom implementation of {@code DeckShuffleStrategy}. To deal cards
- * to players, use the {@code DeckManager} class.</p>
- *
+ * <p>To shuffle and deal cards:</p>
  * <pre>{@code
- * // Example: Shuffling and dealing cards
- * List<Card> deck = ...; // Initialize the deck
- * DeckShuffler.shuffleDeck(deck); // Shuffle the deck
+ * // Initialize a deck and players
+ * List<Card> deck = ...;
+ * List<Player> players = ...;
+ * int handSize = 7;
  *
- * List<Player> players = ...; // Initialize the list of players
- * int handSize = 7; // Number of cards per hand
+ * // Shuffle the deck
+ * DeckShuffler.shuffleDeck(deck);
+ *
+ * // Deal cards to players
  * DeckManager deckManager = new DeckManager();
- * deckManager.dealCards(players, deck, handSize); // Deal cards to players
+ * deckManager.dealCards(players, deck, handSize);
  * }</pre>
  *
  * <h2>Future Extensions</h2>
- * <p>This package can be extended to include features like tracking discarded cards,
- * implementing specialized deck types, or adding advanced shuffle algorithms.</p>
+ * <ul>
+ *   <li>Tracking discarded cards for recycling or analysis.</li>
+ *   <li>Implementing specialized deck types (e.g., themed or multi-deck setups).</li>
+ *   <li>Adding advanced shuffle algorithms, such as seed-based or user-defined shuffling.</li>
+ * </ul>
  */
 package com.Apples2Apples.deck;

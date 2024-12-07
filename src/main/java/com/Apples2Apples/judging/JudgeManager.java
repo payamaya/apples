@@ -5,15 +5,47 @@ import com.Apples2Apples.player.Judge;
 import com.Apples2Apples.player.Player;
 import java.util.List;
 
+/**
+ * The {@code JudgeManager} class manages the judging process during gameplay.
+ * It handles the selection of winning cards, rotates the judge role among players,
+ * and provides notifications about the game's progress.
+ *
+ * <h2>Responsibilities</h2>
+ * <ul>
+ *   <li>Facilitate the judging process using a given {@link JudgingStrategy}.</li>
+ *   <li>Send notifications to players through the {@link NotificationService}.</li>
+ *   <li>Rotate the judge role among players after each round.</li>
+ * </ul>
+ *
+ * <h2>Design Patterns</h2>
+ * <ul>
+ *   <li><b>Strategy Pattern:</b> Allows for different judging strategies by
+ *       accepting a {@code JudgingStrategy} implementation.</li>
+ *   <li><b>Dependency Injection:</b> Relies on constructor injection for
+ *       {@link NotificationService} and {@link JudgingStrategy}.</li>
+ * </ul>
+ */
 public class JudgeManager {
     private final JudgingStrategy judgingStrategy;
     private final NotificationService notificationService;
 
+    /**
+     * Constructs a new {@code JudgeManager} with the specified strategy and notification service.
+     *
+     * @param judgingStrategy    the strategy used to select the winning card.
+     * @param notificationService the service used to send game notifications.
+     */
     public JudgeManager(JudgingStrategy judgingStrategy, NotificationService notificationService) {
         this.judgingStrategy = judgingStrategy;
         this.notificationService = notificationService;
     }
-
+    /**
+     * Selects the winner of the round based on red apple submissions.
+     *
+     * @param redAppleSubmissions the submitted red apple cards.
+     * @param judge               the current judge.
+     * @param players             the list of players in the game.
+     */
     public void selectWinner(List<Card> redAppleSubmissions, Judge judge, List<Player> players) {
         if (redAppleSubmissions.isEmpty()) {
             notificationService.notify("No red apple submissions available.");
@@ -38,22 +70,23 @@ public class JudgeManager {
         }
         return null;
     }
-
+    /**
+     * Rotates the judge role to the next player in the list.
+     *
+     * @param players      the list of players in the game.
+     * @param currentJudge the current judge.
+     * @return the next player to act as judge.
+     */
     public Player rotateJudge(List<Player> players, Player currentJudge) {
-        // Find current judge's index
         int currentJudgeIndex = players.indexOf(currentJudge);
-
-        // Make the current judge no longer the judge
         currentJudge.setJudge(false);
 
         // Find the next player (next in the list, loop back to the first if we are at the end)
         int nextJudgeIndex = (currentJudgeIndex + 1) % players.size();
         Player nextJudge = players.get(nextJudgeIndex);
 
-        // Set the next player as the new judge
         nextJudge.setJudge(true);
 
-        // Notify that the judge has rotated
         notificationService.notify(nextJudge.getName() + " is the new judge.");
         return nextJudge;
     }
