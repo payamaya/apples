@@ -1,6 +1,7 @@
 package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.game.Game;
 import com.Apples2Apples.player.Player;
 
@@ -44,8 +45,13 @@ public class CardReplenisher {
      * @param handSizeLimit The maximum number of cards each player should have in their hand.
      */
     public static void replenishAllPlayers(List<Player> players, List<Card> deck, int handSizeLimit) {
-        for (Player player : players) {
-            replenishCardsForPlayer(player, deck, handSizeLimit);
+        try {
+            for (Player player : players) {
+                replenishCardsForPlayer(player, deck, handSizeLimit);
+            }
+        } catch (Exception e) {
+            throw new CustomExceptions.CardReplenishException("Not enough cards in deck to replenish all players");
         }
+
     }
 }

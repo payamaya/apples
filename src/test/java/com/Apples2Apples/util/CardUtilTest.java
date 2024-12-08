@@ -5,38 +5,36 @@ import com.Apples2Apples.card.GreenAppleCard;
 import com.Apples2Apples.card.RedAppleCard;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CardUtilTest {
+
     @Test
     public void testLoadGreenApples() throws IOException {
-        Path tempFile = Files.createTempFile("greenApples", ".txt");
-        try (FileWriter writer = new FileWriter(tempFile.toFile())) {
-            writer.write("Crisp\nJuicy\nFresh");
-        }
-        List<Card> greenApplesples = CardUtil.createGreenApplesFromFile(tempFile.toString());
-        assertEquals(3, greenApplesples.size());
-        assertTrue(greenApplesples.get(0) instanceof GreenAppleCard);
-        assertEquals("Crisp", greenApplesples.get(0).getValue());
+        // Test file path within the test/resources folder (assuming it exists)
+        String testFilePath = "greenApples.txt";
 
+        List<Card> greenApples = CardUtil.createGreenApplesFromFile(testFilePath);
+        assertEquals(3, greenApples.size(), "Incorrect number of green apple cards"); // Adjust expected count as needed
+
+        assertTrue(greenApples.get(0) instanceof GreenAppleCard, "Card is not a GreenAppleCard");
+        assertEquals("Crisp", greenApples.get(0).getValue(), "Incorrect GreenAppleCard value");
     }
+
     @Test
     public void testLoadRedApples() throws IOException {
-        Path tempFile = Files.createTempFile("redApples", ".txt");
-        try (FileWriter writer = new FileWriter(tempFile.toFile())) {
-            writer.write("Apple\nBanana\nCherry");
-        }
+        // Test file path within the test/resources folder (assuming it exists)
+        String testFilePath = "redApples.txt";
 
-        List<Card> redApples = CardUtil.createRedApplesFromFile(tempFile.toString());
-        assertEquals(3, redApples.size());
-        assertTrue(redApples.get(0) instanceof RedAppleCard);
-        assertEquals("Apple", redApples.get(0).getValue());
+        List<Card> redApples = CardUtil.createRedApplesFromFile(testFilePath);
+        assertEquals(3, redApples.size(), "Incorrect number of red apple cards"); // Adjust expected count as needed
+
+        assertTrue(redApples.get(0) instanceof RedAppleCard, "Card is not a RedAppleCard");
+        assertEquals("Apple Pie", redApples.get(0).getValue(), "Incorrect RedAppleCard value");
     }
 }

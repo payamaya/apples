@@ -1,6 +1,9 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.exception.CustomExceptions;
+
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -27,9 +30,19 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
         for (int i = 0; i < cards.size(); i++) {
             logger.info(i + ": " + cards.get(i));
         }
-        int choice = scanner.nextInt();
+
+        int choice;
+        try {
+            choice = scanner.nextInt();
+            if (choice < 0 || choice >= cards.size()) {
+                throw new CustomExceptions.InvalidUserInputException("Invalid choice. Please select a card from the list.");
+            }
+        } catch (InputMismatchException e) {
+            throw new CustomExceptions.InvalidUserInputException("Invalid input. Please enter a number.");
+        }
         return cards.get(choice);
     }
+
 
     @Override
     public boolean canSeeCards() {
@@ -52,6 +65,14 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
         }
 
         int choice = scanner.nextInt();
+        try {
+            choice = scanner.nextInt();
+            if (choice < 0 || choice >= submissions.size()) {
+                throw new CustomExceptions.InvalidUserInputException("Invalid choice. Please select a card from the list.");
+            }
+        } catch (InputMismatchException e) {
+            throw new CustomExceptions.InvalidUserInputException("Invalid input. Please enter a number.");
+        }
         return submissions.get(choice);
     }
 

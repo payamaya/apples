@@ -1,5 +1,7 @@
 package com.Apples2Apples.util;
 
+
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.player.Player;
 import java.util.List;
@@ -36,7 +38,11 @@ public class JudgeSelector {
         Player newJudge = players.get(randomIndex);
 
         newJudge.setJudge(true);
-        gameNotification.setMessage(newJudge.getName() + " is the new judge!");
+        try {
+            gameNotification.setMessage(newJudge.getName() + " is the new judge!");
+        } catch (Exception e) {
+            throw new CustomExceptions.JudgeSelectorNotificationException("Failed to deliver notification about new judge", e);
+        }
 
         return newJudge;
     }

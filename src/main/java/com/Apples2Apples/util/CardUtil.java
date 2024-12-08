@@ -16,7 +16,7 @@ public class CardUtil {
      * @return A list of GreenAppleCard objects.
      */
     public static List<Card> createGreenApplesFromFile(String filePath) {
-        return FileReaderService.readGreenApples(filePath);
+        return FileDAO.readGreenAppleCards(filePath);
     }
     /**
      * Creates a list of RedAppleCard objects by reading card data from the specified file.
@@ -25,6 +25,6 @@ public class CardUtil {
      * @return A list of RedAppleCard objects.
      */
     public static List<Card> createRedApplesFromFile(String filePath) {
-        return FileReaderService.readRedApples(filePath);
+        return FileDAO.readRedAppleCards(filePath);
     }
 }

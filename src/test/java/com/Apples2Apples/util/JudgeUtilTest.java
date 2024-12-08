@@ -2,6 +2,7 @@ package com.Apples2Apples.util;
 
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.card.GreenAppleCard;
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.observer.GameObserver;
 import com.Apples2Apples.player.Player;
@@ -44,7 +45,6 @@ class JudgeUtilTest {
     @Test
     void testDrawGreenAppleEmptyDeck() {
         greenApplesDeck.clear();
-        Card drawnCard = JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification);
-        assertNull(drawnCard);
+        assertThrows(CustomExceptions.JudgeUtilException.class, () -> JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification));
     }
 }

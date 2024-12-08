@@ -1,10 +1,13 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.exception.CustomExceptions;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -28,8 +31,9 @@ public class OnlinePlayer extends AbstractPlayer {
         try {
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
-        } catch (Exception e) {
-            throw new RuntimeException("Error setting up socket streams.", e);
+        } catch (IOException e) {
+            // Throw a more specific SocketStreamException
+            throw new CustomExceptions.SocketStreamException("Error setting up socket streams.", e);
         }
     }
 
@@ -38,8 +42,12 @@ public class OnlinePlayer extends AbstractPlayer {
         try {
             out.writeObject("Choose a card");
             return (Card) in.readObject();
-        } catch (Exception e) {
-            throw new RuntimeException("Error during communication.", e);
+        } catch (SocketException e) {
+            throw new CustomExceptions.OnlineCommunicationException("Error communicating with server due to socket issue.", e);
+        } catch (ClassNotFoundException e) {
+            throw new CustomExceptions.OnlineCommunicationException("Error receiving object from server. Class not found.", e);
+        } catch (IOException e) {
+            throw new CustomExceptions.OnlineCommunicationException("Error during communication.", e);  // Fallback for other IO issues
         }
     }
 
@@ -67,11 +75,6 @@ public class OnlinePlayer extends AbstractPlayer {
     public void setCanSeeCards(boolean canSeeCards) {
 
     }
-
-//    @Override
-//    public Card selectRedApple() {
-//        return null;
-//    }
 
     @Override
     public void update(String message) {

@@ -1,5 +1,7 @@
 package com.Apples2Apples.observer;
 
+import com.Apples2Apples.exception.CustomExceptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class GameNotification implements GameSubject {
      */
     public void setMessage(String message) {
         if (message == null || message.trim().isEmpty()) {
-            throw new IllegalArgumentException("Message cannot be null or empty.");
+            throw new CustomExceptions.InvalidGameNotificationException("Notification message cannot be null or empty.");
         }
         this.message = message;
         notifyObservers();

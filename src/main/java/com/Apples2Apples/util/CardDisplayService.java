@@ -1,9 +1,12 @@
 package com.Apples2Apples.util;
 
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.observer.GameObserver;
 import com.Apples2Apples.player.Player;
 
 import java.util.logging.Logger;
+
+
 /**
  * The CardDisplayService class implements the Observer interface to handle game notifications
  * and display player hands. It logs messages about game updates and displays a player's hand of cards
@@ -20,8 +23,12 @@ public class CardDisplayService implements GameObserver {
      */
     @Override
     public void update(String message) {
-
-        logger.info(() -> "Notification received: " + message);
+        try {
+            logger.info("Notification received: " + message);
+        } catch ( CustomExceptions.NotificationDisplayException e) {
+            // Use logger.error here
+            logger.info("Error displaying notification: " + e);
+        }
     }
     /**
      * Displays the player's hand if they are allowed to see it.

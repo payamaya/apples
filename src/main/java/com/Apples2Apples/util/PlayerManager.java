@@ -1,5 +1,6 @@
 package com.Apples2Apples.util;
 
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.player.Player;
 import com.Apples2Apples.player.PlayerFactory;
 import com.Apples2Apples.player.PlayerType;
@@ -19,6 +20,9 @@ public class PlayerManager {
      * @param tableSize the desired number of players for the game
      */
     public void addBotPlayersIfNeeded(List<Player> players, int tableSize) {
+        if (tableSize < 1) {
+            throw new CustomExceptions.InvalidTableSizeException("Table size must be at least 1.");
+        }
         int currentSize = players.size();
         if (currentSize < tableSize) {
             int botsToAdd = tableSize - currentSize;

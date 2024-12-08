@@ -1,6 +1,7 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.observer.PlayerObserver;
 
 
@@ -20,8 +21,9 @@ public class BotPlayer extends AbstractPlayer implements Judge, PlayerObserver {
     }
 
     @Override
-    public Card chooseRedAppleCard() {
-        return getRandomCard(getHand());
+    public Card chooseRedAppleCard() throws CustomExceptions.BotLogicException {
+            return getRandomCard(getHand());
+
     }
 
     @Override

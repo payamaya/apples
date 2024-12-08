@@ -1,5 +1,7 @@
 package com.Apples2Apples.observer;
 
+import com.Apples2Apples.exception.CustomExceptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,9 @@ public class PlayerNotification implements GameSubject {
      * @param message the message to be broadcast to observers
      */
     public void setMessage(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            throw new CustomExceptions.InvalidPlayerNotificationException("Player notification message cannot be null or empty.");
+        }
         this.message = message;
         notifyObservers();
     }

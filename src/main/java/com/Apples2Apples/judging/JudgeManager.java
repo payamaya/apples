@@ -1,8 +1,11 @@
 package com.Apples2Apples.judging;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.game.Game;
 import com.Apples2Apples.player.Judge;
 import com.Apples2Apples.player.Player;
+import com.Apples2Apples.util.LoggerUtil;
+
 import java.util.List;
 
 /**
@@ -26,6 +29,7 @@ import java.util.List;
  * </ul>
  */
 public class JudgeManager {
+    private static final LoggerUtil logger = LoggerUtil.getInstance(Game.class);
     private final JudgingStrategy judgingStrategy;
     private final NotificationService notificationService;
 
@@ -52,13 +56,18 @@ public class JudgeManager {
             return;
         }
 
-        Card favoriteRedApple = judge.selectFavoriteRedApple(redAppleSubmissions);
-        notificationService.notify("Judge selected: " + favoriteRedApple);
+        try {
+            Card favoriteRedApple = judge.selectFavoriteRedApple(redAppleSubmissions);
+            notificationService.notify("Judge selected: " + favoriteRedApple);
 
-        Player winningPlayer = findPlayerWhoSubmitted(favoriteRedApple, players);
-        if (winningPlayer != null) {
-            winningPlayer.incrementScore();
-            notificationService.notify(winningPlayer.getName() + " wins this round!");
+            Player winningPlayer = findPlayerWhoSubmitted(favoriteRedApple, players);
+            if (winningPlayer != null) {
+                winningPlayer.incrementScore();
+                notificationService.notify(winningPlayer.getName() + " wins this round!");
+            }
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            logger.error("Error selecting winner: " + e.getMessage(), e);
+
         }
     }
 

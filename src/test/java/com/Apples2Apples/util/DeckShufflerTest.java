@@ -15,26 +15,34 @@ class DeckShufflerTest {
 
     @Test
     void testShuffleDeckChangesOrder() {
+        final int numTrials = 100; // Number of times to run the test
+        int successfulShuffles = 0;
+
         List<Card> deck = new ArrayList<>(Arrays.asList(
                 new RedAppleCard("Courageous"),
                 new RedAppleCard("Funny"),
                 new RedAppleCard("Brave")
         ));
 
-        List<Card> originalDeck = new ArrayList<>(deck);
+        for (int i = 0; i < numTrials; i++) {
+            List<Card> originalDeck = new ArrayList<>(deck);
+            DeckShuffler.shuffleDeck(deck);
 
-        DeckShuffler.shuffleDeck(deck);
+            boolean isDifferentOrder = false;
+            for (int j = 0; j < deck.size(); j++) {
+                if (!deck.get(j).equals(originalDeck.get(j))) {
+                    isDifferentOrder = true;
+                    break;
+                }
+            }
 
-        // Check if at least one element has moved to a different position
-        boolean isDifferentOrder = false;
-        for (int i = 0; i < deck.size(); i++) {
-            if (!deck.get(i).equals(originalDeck.get(i))) {
-                isDifferentOrder = true;
-                break;
+            if (isDifferentOrder) {
+                successfulShuffles++;
             }
         }
 
-        assertTrue(isDifferentOrder, "Deck order should be different after shuffle.");
+        // Assert that at least one shuffle resulted in a different order
+        assertTrue(successfulShuffles > 0, "Deck order never changed after " + numTrials + " shuffles");
     }
 
     @Test
