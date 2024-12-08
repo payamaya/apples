@@ -18,10 +18,6 @@ public interface Player extends Playable {
     void setHand(List<Card> cards);
     List<Card> getHand();
 
-    // General notification update method
-    void update(String message);
-
-    // This could be part of the Judge functionality, not every player needs this.
     boolean isJudge();
     void setJudge(boolean b);
 }

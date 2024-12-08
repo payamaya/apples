@@ -1,7 +1,6 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
-import com.Apples2Apples.observer.GameObserver;
 import com.Apples2Apples.observer.PlayerObserver;
 
 
@@ -14,7 +13,6 @@ import java.util.Random;
  */
 public class BotPlayer extends AbstractPlayer implements Judge, PlayerObserver {
     private boolean isJudge;
-    private String name;
     
     public BotPlayer(String name, boolean isJudge) {
         super(name);

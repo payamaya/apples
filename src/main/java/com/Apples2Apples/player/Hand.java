@@ -40,7 +40,10 @@ public class Hand {
     }
 
     public void setCards(List<Card> newCards) {
-        this.cards.clear();
-        this.cards.addAll(newCards);
+        if (newCards == null) {
+            throw new IllegalArgumentException("Cards cannot be null.");
+        }
+        cards.clear();
+        cards.addAll(newCards);
     }
 }

@@ -34,4 +34,7 @@ public interface Playable {
      * @return true if the card has been submitted, false otherwise.
      */
     boolean hasSubmitted(Card card);
+
+    // General notification update method
+    void update(String message);
 }

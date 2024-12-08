@@ -21,6 +21,9 @@ public class GameNotification implements GameSubject {
      * @param message the message to notify observers about
      */
     public void setMessage(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            throw new IllegalArgumentException("Message cannot be null or empty.");
+        }
         this.message = message;
         notifyObservers();
     }
@@ -39,7 +42,9 @@ public class GameNotification implements GameSubject {
      */
     @Override
     public void addObserver(GameObserver observer) {
-        observers.add(observer);
+        if (observer != null && !observers.contains(observer)) {
+            observers.add(observer);
+        }
     }
     /**
      * Removes an observer from the list of observers.

@@ -147,16 +147,26 @@ public class Game {
     public void notifyPlayers(String message) {
         gameNotification.setMessage(message);
     }
+           public void startGame(){
+                while(!isGameOver()){
+                    GamePhase currentPhase = phases.get(currentPhaseIndex);
+                    logger.info("********  The game has started! ********");
+                    currentPhase.execute(this);
 
-    public void startGame() {
-        notifyPlayers("********  The game has started! ********");
-
-        while (!isGameOver()) {
-            nextPhase();
-        }
-        Player winner = getWinner();
-        notifyPlayers("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
-    }
+                    currentPhaseIndex = (currentPhaseIndex +1 ) % phases.size();
+                }
+               Player winner = getWinner();
+                logger.info("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
+           }
+//    public void startGame() {
+//        notifyPlayers("********  The game has started! ********");
+//
+//        while (!isGameOver()) {
+//            nextPhase();
+//        }
+//        Player winner = getWinner();
+//        notifyPlayers("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
+//    }
     private boolean isGameOver() {
         return players.stream().anyMatch(player -> player.getScore() >= winningGreenApples);
     }
