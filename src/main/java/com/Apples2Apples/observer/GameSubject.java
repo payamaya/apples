@@ -8,19 +8,19 @@ package com.Apples2Apples.observer;
  * and {@code PlayerNotification}) must implement to maintain the list of observers and notify them
  * of updates when the state changes.</p>
  */
-public interface Subject {
+public interface GameSubject {
     /**
      * Registers an observer to receive notifications.
      *
      * @param observer the observer to be added
      */
-    void addObserver(Observer observer);
+    void addObserver(GameObserver observer);
     /**
      * Unregisters an observer from receiving further notifications.
      *
      * @param observer the observer to be removed
      */
-    void removeObserver(Observer observer);
+    void removeObserver(GameObserver observer);
 
     /**
      * Notifies all registered observers about changes.

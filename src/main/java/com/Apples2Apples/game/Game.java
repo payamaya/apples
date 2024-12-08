@@ -12,12 +12,11 @@ import com.Apples2Apples.networking.GameServer;
 import com.Apples2Apples.networking.INetworkServer;
 import com.Apples2Apples.networking.IServerFactory;
 import com.Apples2Apples.observer.GameNotification;
+import com.Apples2Apples.observer.GameObserver;
 import com.Apples2Apples.phases.GamePhase;
 import com.Apples2Apples.player.*;
 import com.Apples2Apples.util.*;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +34,7 @@ public class Game {
     private final List<Card> redApplesDeck;
     private final JudgeSelector judgeSelector;
     private final int winningGreenApples;
+
     
     private GameNotification gameNotification;
     private final INetworkServer networkManager;
@@ -56,6 +56,7 @@ public class Game {
         this.networkManager = serverFactory.createServer();
         this.gameServer = (GameServer) networkManager;
         this.judgeSelector = new JudgeSelector(gameNotification);
+        this.gameNotification = new GameNotification();
         this.deckManager = new DeckManager();
         this.serverFactory = serverFactory;
         this.judgeManager = judgeManager;
@@ -68,7 +69,7 @@ public class Game {
         winningGreenApples = TabelSizeUtil.determineWinningGreenApples(players.size());
         judgeManager = new JudgeManager(new DefaultJudgingStrategy(), new NotificationService(gameNotification));
         playerManager = new PlayerManager();
-        
+        players.forEach(player -> gameNotification.addObserver((GameObserver) player));
         shuffleDecks();
         addBotPlayersIfNeeded(tableSize);
         dealInitialCards();
@@ -144,8 +145,7 @@ public class Game {
         this.currentJudge = currentJudge;
     }
     public void notifyPlayers(String message) {
-        // Logic to notify all players
-        System.out.println(message); // Placeholder for actual notification logic
+        gameNotification.setMessage(message);
     }
 
     public void startGame() {

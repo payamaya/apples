@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The {@code GameNotification} class implements the {@link Subject} interface
+ * The {@code GameNotification} class implements the {@link GameSubject} interface
  * to allow observers to register and receive notifications about game-related events.
  * It maintains a list of observers and notifies them when a new message is set.
  *
  * <p>This class is used to broadcast game-related messages, such as round updates
  * or game state changes, to all interested observers.</p>
  */
-public class GameNotification implements Subject {
-    private List<Observer> observers = new ArrayList<>();
+public class GameNotification implements GameSubject {
+    private final List<GameObserver> observers = new ArrayList<>();
     private String message;
 
     /**
@@ -38,7 +38,7 @@ public class GameNotification implements Subject {
      * @param observer the observer to add
      */
     @Override
-    public void addObserver(Observer observer) {
+    public void addObserver(GameObserver observer) {
         observers.add(observer);
     }
     /**
@@ -47,7 +47,7 @@ public class GameNotification implements Subject {
      * @param observer the observer to remove
      */
     @Override
-    public void removeObserver(Observer observer) {
+    public void removeObserver(GameObserver observer) {
         observers.remove(observer);
     }
     /**
@@ -55,7 +55,7 @@ public class GameNotification implements Subject {
      */
     @Override
     public void notifyObservers() {
-        for (Observer observer : observers) {
+        for (GameObserver observer : observers) {
             observer.update(message);
         }
     }

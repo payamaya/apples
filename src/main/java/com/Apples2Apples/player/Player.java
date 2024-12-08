@@ -22,6 +22,6 @@ public interface Player extends Playable {
     void update(String message);
 
     // This could be part of the Judge functionality, not every player needs this.
-    void setJudge(boolean b);
     boolean isJudge();
+    void setJudge(boolean b);
 }

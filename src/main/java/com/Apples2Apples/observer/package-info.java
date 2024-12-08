@@ -13,19 +13,19 @@
  * <h2>Key Classes</h2>
  * <ul>
  *   <li>
- *     {@link com.Apples2Apples.observer.GameNotification}: A concrete implementation of the {@link Subject} interface,
+ *     {@link com.Apples2Apples.observer.GameNotification}: A concrete implementation of the {@link com.Apples2Apples.observer.GameSubject} interface,
  *     used to notify all registered observers about game-related events or messages.
  *   </li>
  *   <li>
- *     {@link com.Apples2Apples.observer.PlayerNotification}: Another implementation of the {@link Subject} interface,
+ *     {@link com.Apples2Apples.observer.PlayerNotification}: Another implementation of the {@link com.Apples2Apples.observer.GameSubject} interface,
  *     specifically designed for player-related notifications, such as status updates or score changes.
  *   </li>
  *   <li>
- *     {@link com.Apples2Apples.observer.Observer}: The interface that all observers must implement to receive
+ *     {@link com.Apples2Apples.observer.GameObserver}: The interface that all observers must implement to receive
  *     updates from the subject.
  *   </li>
  *   <li>
- *     {@link com.Apples2Apples.observer.Subject}: The interface that defines the methods for adding, removing,
+ *     {@link com.Apples2Apples.observer.GameSubject}: The interface that defines the methods for adding, removing,
  *     and notifying observers.
  *   </li>
  * </ul>
@@ -37,8 +37,8 @@
  * </ul>
  *
  * <h2>Usage</h2>
- * <p>To implement a notification system in the game, a {@link com.Apples2Apples.observer.Subject} (e.g., {@code GameNotification} or {@code PlayerNotification})
- * is instantiated and observers (implementing the {@link com.Apples2Apples.observer.Observer} interface) can register to receive updates. The subject notifies all
+ * <p>To implement a notification system in the game, a {@link com.Apples2Apples.observer.GameSubject} (e.g., {@code GameNotification} or {@code PlayerNotification})
+ * is instantiated and observers (implementing the {@link com.Apples2Apples.observer.GameObserver} interface) can register to receive updates. The subject notifies all
  * observers whenever there is a change (such as game status updates or player actions).</p>
  *
  * <pre>{@code

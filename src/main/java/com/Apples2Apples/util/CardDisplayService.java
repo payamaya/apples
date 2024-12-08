@@ -1,6 +1,6 @@
 package com.Apples2Apples.util;
 
-import com.Apples2Apples.observer.Observer;
+import com.Apples2Apples.observer.GameObserver;
 import com.Apples2Apples.player.Player;
 
 import java.util.logging.Logger;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * The CardDisplayService subscribes to updates from game events and notifies players of changes.
  */
-public class CardDisplayService implements Observer {
+public class CardDisplayService implements GameObserver {
     private static final Logger logger = Logger.getLogger(CardDisplayService.class.getName());
     /**
      * Updates the display with the provided message from the game event.

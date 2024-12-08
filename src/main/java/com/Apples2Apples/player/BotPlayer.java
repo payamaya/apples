@@ -1,7 +1,9 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
-import com.Apples2Apples.observer.Observer;
+import com.Apples2Apples.observer.GameObserver;
+import com.Apples2Apples.observer.PlayerObserver;
+
 
 import java.util.List;
 import java.util.Random;
@@ -10,9 +12,10 @@ import java.util.Random;
  * and makes decisions based on random card selection.
  * It can also act as a judge if needed, deciding which red apple card is favored.
  */
-public class BotPlayer extends AbstractPlayer implements Judge, Observer {
+public class BotPlayer extends AbstractPlayer implements Judge, PlayerObserver {
     private boolean isJudge;
-
+    private String name;
+    
     public BotPlayer(String name, boolean isJudge) {
         super(name);
         this.isJudge = isJudge;
@@ -25,6 +28,9 @@ public class BotPlayer extends AbstractPlayer implements Judge, Observer {
 
     @Override
     public Card selectFavoriteRedApple(List<Card> submissions) {
+        if (!isJudge) {
+            throw new UnsupportedOperationException("Only a judge can select a favorite card.");
+        }
         return getRandomCard(submissions);
     }
 

@@ -62,7 +62,9 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
     }
 
     @Override
-    public void update(String message) {}
+    public void update(String message) {
+        System.out.println(getName() + " received update: " + message);
+    }
 
     @Override
     public void setJudge(boolean isJudge) {
