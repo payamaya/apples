@@ -12,6 +12,7 @@ public abstract class AbstractPlayer implements Player {
     protected final String name;
     protected final Hand hand;
     private int score;
+    private boolean isJudge;
 
     /**
      * Constructor that initializes the player with a name.
@@ -20,6 +21,7 @@ public abstract class AbstractPlayer implements Player {
      */
     public AbstractPlayer(String name) {
         this.name = name;
+        this.isJudge= isJudge();
         this.hand = new Hand();
         this.score = 0;
     }
@@ -103,7 +105,15 @@ public abstract class AbstractPlayer implements Player {
     @Override
     public abstract Card chooseRedAppleCard();
 
-    public abstract Card selectFavoriteRedApple(List<Card> submissions);
+    @Override
+    public void setJudge(boolean isJudge) {
+        this.isJudge = isJudge;
+        if (isJudge) {
+            System.out.println(getName() + " is now the judge.");
+        } else {
+            System.out.println(getName() + " is no longer the judge.");
+        }
+    }
     /**
      * Abstract method for selecting the favorite red apple card from submissions.
      * This method must be implemented by subclasses of AbstractPlayer.
@@ -111,5 +121,5 @@ public abstract class AbstractPlayer implements Player {
      * @param submissions The list of red apple cards submitted by players.
      * @return The selected favorite red apple card.
      */
-//    public abstract Card selectFavoriteRedApple(List<Card> submissions);
+   public abstract Card selectFavoriteRedApple(List<Card> submissions);
 }

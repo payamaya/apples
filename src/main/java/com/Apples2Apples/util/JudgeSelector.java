@@ -30,19 +30,24 @@ public class JudgeSelector {
      * @return The player who was selected as the new judge.
      */
     public Player selectAndNotifyRandomJudge(List<Player> players) throws CustomExceptions.JudgeSelectorNotificationException {
+        if (players.isEmpty()) {
+            throw new IllegalArgumentException("Player list cannot be empty");
+        }
+
         // Select a random player as the judge
         Player selectedJudge = players.get(new Random().nextInt(players.size()));
 
         try {
-            // Notify players about the new judge
-            gameNotification.setMessage(selectedJudge.getName() + " is now the judge.");
+            // Set the notification message to match the test expectation
+            gameNotification.setMessage(selectedJudge.getName() + " is the new judge.");
             notifyObservers(gameNotification);
         } catch (Exception e) {
             throw new CustomExceptions.JudgeSelectorNotificationException("Failed to deliver notification about new judge", e);
         }
 
-        return selectedJudge;  // Return the selected judge
+        return selectedJudge;
     }
+    
 
     /**
      * Notify the observers (players) with the provided notification.
@@ -51,7 +56,6 @@ public class JudgeSelector {
      */
     private void notifyObservers(GameNotification notification) {
         // Implement the logic for notifying observers here
-        // For example, you may have a list of observers to iterate over and notify each one
         System.out.println("Notification to all players: " + notification.getMessage());
     }
 }

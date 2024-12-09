@@ -53,7 +53,7 @@ public class CustomExceptions {
         }
     }
     public static class InvalidUserInputException extends RuntimeException {
-        public InvalidUserInputException(String message) {
+        public InvalidUserInputException(String message, String s) {
             super(message);
         }
     }
@@ -80,6 +80,11 @@ public class CustomExceptions {
     }
     public static class InvalidPlayerCountException extends RuntimeException {
         public InvalidPlayerCountException(String message) {
+            super(message);
+        }
+    }
+    public static class InvalidPlayerTypeException extends Exception {
+        public InvalidPlayerTypeException(String message) {
             super(message);
         }
     }

@@ -39,14 +39,17 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
 
         int choice;
         try {
-            choice = scanner.nextInt();
-            if (choice < 0 || choice >= cards.size()) {
-                throw new CustomExceptions.InvalidUserInputException("Invalid choice. Please select a card from the list.");
+            System.out.println("Choose a red apple card (enter the card number):");
+            int index = Integer.parseInt(scanner.nextLine().trim());
+            if (index < 0 || index >= getHand().size()) {
+                throw new CustomExceptions.InvalidUserInputException(String.valueOf(index),
+                        "Please select a number between 0 and " + (getHand().size() - 1) + ".");
             }
-        } catch (InputMismatchException e) {
-            throw new CustomExceptions.InvalidUserInputException("Invalid input. Please enter a number.");
+            return getHand().get(index);
+        } catch (NumberFormatException e) {
+            throw new CustomExceptions.InvalidUserInputException("non-numeric input",
+                    "Input must be a valid number. Example: 0, 1, or 2.");
         }
-        return cards.get(choice);
     }
 
     @Override
@@ -58,10 +61,10 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
         int choice = scanner.nextInt();
         try {
             if (choice < 0 || choice >= submissions.size()) {
-                throw new CustomExceptions.InvalidUserInputException("Invalid choice. Please select a card from the list.");
+                throw new CustomExceptions.InvalidUserInputException("Invalid choice. Please select a card from the list.", "Please select a number between 0 and " + (getHand().size() - 1) + ".");
             }
         } catch (InputMismatchException e) {
-            throw new CustomExceptions.InvalidUserInputException("Invalid input. Please enter a number.");
+            throw new CustomExceptions.InvalidUserInputException("Invalid input. Please enter a number.", "Please select a number between 0 and " + (getHand().size() - 1) + ".");
         }
         return submissions.get(choice);
     }
@@ -105,7 +108,7 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
     @Override
     public void incrementScore() {
         score++;  // Increment score
-        logger.info(getName() + "'s score is now: " + score);
+        System.out.println(getName() + "'s score is now: " + score);
     }
 
 

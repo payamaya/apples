@@ -1,5 +1,6 @@
 package com.Apples2Apples.card;
 
+import com.Apples2Apples.exception.CustomExceptions;
 import com.Apples2Apples.game.Game;
 import com.Apples2Apples.player.Player;
 import com.Apples2Apples.util.LoggerUtil;
@@ -24,7 +25,7 @@ public class RedAppleSubmissionManager {
                     Card chosenCard = player.chooseRedAppleCard();
                     submissions.add(chosenCard);
                     player.removeCard(chosenCard);
-                } catch (Exception e) {
+                } catch (CustomExceptions.InvalidUserInputException e) {
                     logger.error("Error collecting card from player: " + player.getName(), e);
 
                 }

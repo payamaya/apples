@@ -4,6 +4,7 @@ import com.Apples2Apples.card.Card;
 import com.Apples2Apples.observer.PlayerObserver;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -21,7 +22,10 @@ public class BotPlayer extends AbstractPlayer implements Judge, PlayerObserver {
     public BotPlayer(String name, List<Card> cards, boolean isJudge) {
         super(name);
         this.isJudge = isJudge;
-        setHand(cards);  // Set the player's hand based on provided cards
+        if (cards == null) {
+            cards = new ArrayList<>();  // Default to an empty list if null is provided
+        }
+        hand.setCards(cards);  // Set the player's hand based on provided cards
     }
 
     @Override
@@ -61,7 +65,7 @@ public class BotPlayer extends AbstractPlayer implements Judge, PlayerObserver {
 
     @Override
     public void update() {
-        System.out.println(getName() + " received update: " + message);
+        System.out.println(getName() );
     }
 
     @Override

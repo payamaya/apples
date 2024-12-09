@@ -75,7 +75,7 @@ public class Game {
         addBotPlayersIfNeeded(tableSize);
         dealInitialCards();
         randomizeJudge();
-        assignJudge();
+        assignJudge(currentJudge);
     }
 
     public List<Card> getRedAppleSubmissions() {
@@ -200,15 +200,13 @@ public class Game {
         currentJudge = judgeManager.rotateJudge(players, currentJudge);
     }
 
-    private void assignJudge() {
-        if (!players.isEmpty()) {
-            // Set the first player as the judge and notify only that player
-            Player firstPlayer = players.get(0);
-            firstPlayer.setJudge(true);
-
-            // Send notification about the first judge, if necessary
-            notificationService.notify(firstPlayer.getName() + " is the first judge.");
+    public void assignJudge(Player player) {
+        if (currentJudge != null) {
+            currentJudge.setJudge(false); // Clear previous judge
         }
+        currentJudge = player;
+        currentJudge.setJudge(true);
+        notifyPlayers(currentJudge.getName() + " is now the judge.");
     }
 
 }
