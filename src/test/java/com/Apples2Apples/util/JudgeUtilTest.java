@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class JudgeUtilTest {
     private List<Card> greenApplesDeck;
     private GameNotification gameNotification;
+    private List<Card> cards;
+
 
     @BeforeEach
     void setUp() {
@@ -27,7 +29,7 @@ class JudgeUtilTest {
 
         gameNotification = new GameNotification();
         // Provide an empty list of cards as required by BotPlayer constructor
-        Player judge = new BotPlayer("JudgeBot", true);
+        Player judge = new BotPlayer("JudgeBot", cards, true);
         gameNotification.addObserver((GameObserver) judge);
     }
 

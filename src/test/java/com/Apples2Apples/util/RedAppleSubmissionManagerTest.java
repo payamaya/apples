@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RedAppleSubmissionManagerTest {
     private List<Player> players;
     private RedAppleSubmissionManager submissionManager;
+    private List<Card> cards;
 
     @BeforeEach
     void setUp() {
@@ -24,7 +25,7 @@ class RedAppleSubmissionManagerTest {
 
         for (int i = 0; i < 4; i++) {
             // Provide an empty list of cards as required by BotPlayer constructor
-            Player player = new BotPlayer("Player " + i, false);
+            Player player = new BotPlayer("Player " + i, cards, false);
             player.addCard(new RedAppleCard("Card " + i));
             player.addCard(new RedAppleCard("ExtraCard " + i)); // Extra card for multiple submissions
             players.add(player);
@@ -47,7 +48,7 @@ class RedAppleSubmissionManagerTest {
         // Replenish with entirely new cards
         List<Player> newPlayers = new ArrayList<>();
         for (int i = 0; i < players.size(); i++) {
-            newPlayers.add(new BotPlayer("Player " + i, false));
+            newPlayers.add(new BotPlayer("Player " + i, cards, false));
             newPlayers.get(i).addCard(new RedAppleCard("New Card " + i));
         }
 

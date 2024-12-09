@@ -51,7 +51,7 @@ public class PlayerNotification implements GameSubject {
     @Override
     public void notifyObservers() {
         for (GameObserver observer : observers) {
-            observer.update(message);
+            observer.update();
         }
     }
 }

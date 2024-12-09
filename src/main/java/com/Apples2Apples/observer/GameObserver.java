@@ -10,8 +10,6 @@ package com.Apples2Apples.observer;
 public interface GameObserver {
     /**
      * This method is called when the subject updates and needs to notify the observer.
-     *
-     * @param message the message sent by the subject to be processed by the observer
      */
-    void update(String message);  // Method to notify observers about a change
+    void update();  // Method to notify observers about a change
 }

@@ -18,13 +18,11 @@ public class CardDisplayService implements GameObserver {
     private static final Logger logger = Logger.getLogger(CardDisplayService.class.getName());
     /**
      * Updates the display with the provided message from the game event.
-     *
-     * @param message The message to log.
      */
     @Override
-    public void update(String message) {
+    public void update() {
         try {
-            logger.info("Notification received: " + message);
+            logger.info("Notification received: ");
         } catch ( CustomExceptions.NotificationDisplayException e) {
             // Use logger.error here
             logger.info("Error displaying notification: " + e);

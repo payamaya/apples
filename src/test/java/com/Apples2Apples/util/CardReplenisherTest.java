@@ -20,6 +20,7 @@ class CardReplenisherTest {
     private List<Player> players;
     private List<Card> redApplesDeck;
     private static final int HAND_SIZE_LIMIT = 7;
+    private List<Card> cards;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +28,7 @@ class CardReplenisherTest {
         redApplesDeck = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            players.add(new BotPlayer("Player" + i, false)); // Provide an empty list of cards
+            players.add(new BotPlayer("Player" + i, cards, false)); // Provide an empty list of cards
         }
 
         for (int i = 0; i < 28; i++) {

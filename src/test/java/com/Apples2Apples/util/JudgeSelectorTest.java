@@ -1,5 +1,6 @@
 package com.Apples2Apples.util;
 
+import com.Apples2Apples.card.Card;
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.player.BotPlayer;
 import com.Apples2Apples.player.Player;
@@ -16,13 +17,15 @@ class JudgeSelectorTest {
     private List<Player> players;
     private JudgeSelector judgeSelector;
     private GameNotification gameNotification;
+    private List<Card> cards;
+
 
     @BeforeEach
     void setUp() {
         players = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             // Provide an empty list of cards as required by BotPlayer constructor
-            players.add(new BotPlayer("BotPlayer" + i, true));
+            players.add(new BotPlayer("BotPlayer" + i, cards, true));
         }
 
         gameNotification = new GameNotification(); // Real object
@@ -51,7 +54,7 @@ class JudgeSelectorTest {
 
     @Test
     void testSinglePlayer() {
-        List<Player> singlePlayer = List.of(new BotPlayer("SoloPlayer", true));
+        List<Player> singlePlayer = List.of(new BotPlayer("SoloPlayer", cards, true));
         Player judge = judgeSelector.selectAndNotifyRandomJudge(singlePlayer);
 
         assertEquals("SoloPlayer", judge.getName(), "The only player should be selected as the judge.");

@@ -20,6 +20,7 @@ class JudgeManagerTest {
     private List<Card> redAppleSubmissions;
     private Player judge;
     private List<Player> players;
+    private List<Card> cards;
 
     @BeforeEach
     void setUp() {
@@ -31,14 +32,14 @@ class JudgeManagerTest {
         players = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            Player player = new BotPlayer("Player" + i, false);
+            Player player = new BotPlayer("Player" + i, cards, false);
             Card card = new GreenAppleCard("Card" + i);
             player.addCard(card);
             redAppleSubmissions.add(card);
             players.add(player);
         }
 
-        judge = new BotPlayer("JudgeBot", true) {
+        judge = new BotPlayer("JudgeBot", cards, true) {
             @Override
             public Card selectFavoriteRedApple(List<Card> submissions) {
                 return submissions.get(0);  // Always select the first card.

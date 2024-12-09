@@ -22,13 +22,18 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
         this.isJudge = false;
     }
 
+    public HumanPlayer(String name, List<Card> cards, boolean isJudge) {
+        super(name);
+    }
+
+
     @Override
     public Card chooseRedAppleCard() {
         Scanner scanner = new Scanner(System.in);
-        logger.info("Choose a card to play:");
+        logger.warning("Choose a card to play:");
         List<Card> cards = hand.getCards();
         for (int i = 0; i < cards.size(); i++) {
-            logger.info(i + ": " + cards.get(i));
+            System.out.println(i + ": " + cards.get(i));
         }
 
         int choice;

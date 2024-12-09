@@ -1,7 +1,10 @@
 package com.Apples2Apples.player;
 
 import com.Apples2Apples.card.Card;
+import com.Apples2Apples.common.Constants;
+import com.Apples2Apples.exception.CustomExceptions;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 /**
@@ -9,17 +12,25 @@ import java.util.List;
  * It uses the **Factory Pattern** to create different types of players, such as Bot, Human, and Online players.
  */
 public class PlayerFactory {
-    public static Player createPlayer(PlayerType type, String name, List<Card> hand, boolean isJudge) {
-        return switch (type) {
-            case BOT -> new BotPlayer(name, isJudge);
-            case LOCAL -> new HumanPlayer(name);
-            case ONLINE -> {
-                if (hand == null) {
-                    throw new IllegalArgumentException("OnlinePlayer requires a hand of cards.");
+
+    public static Player createPlayer(PlayerType type, String name, List<Card> cards, boolean isJudge) {
+        switch (type) {
+            case LOCAL:
+                return new HumanPlayer(name, cards, isJudge);
+            case ONLINE:
+                try {
+                    // Example placeholder socket; replace with actual implementation
+                    Socket socket = new Socket("127.0.0.1", Constants.SERVER_PORT.getValue());
+                    // Create and return OnlinePlayer with socket
+                    return new OnlinePlayer(name, socket);  // Name and socket are passed to OnlinePlayer
+                } catch (IOException e) {
+                    System.err.println("Failed to connect to the server. Switching to LOCAL player.");
+                    return new HumanPlayer(name, cards, isJudge);
                 }
-                yield new OnlinePlayer(name, hand, new Socket()); // Provide a valid socket connection
-            }
-            default -> throw new IllegalArgumentException("Invalid player type.");
-        };
+            case BOT:
+                return new BotPlayer(name, cards, isJudge);
+            default:
+                throw new IllegalArgumentException("Unknown player type: " + type);
+        }
     }
 }

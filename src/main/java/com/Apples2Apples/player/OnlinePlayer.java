@@ -3,9 +3,7 @@ package com.Apples2Apples.player;
 import com.Apples2Apples.card.Card;
 import com.Apples2Apples.exception.CustomExceptions;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
@@ -20,34 +18,27 @@ public class OnlinePlayer extends AbstractPlayer {
     private static final Logger logger = Logger.getLogger(HumanPlayer.class.getName());
     private boolean isJudge;
 
-    private final Socket socket;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private Socket socket;
+    private ObjectInputStream  in;
+    private ObjectOutputStream  out;
 
-    public OnlinePlayer(String name, List<Card> hand, Socket socket) {
-        super(name);
+    public OnlinePlayer(String name, Socket socket) throws IOException {
+        super(name);  // Call the superclass constructor with the player's name
         this.socket = socket;
-        this.isJudge = false;
-        try {
-            this.out = new ObjectOutputStream(socket.getOutputStream());
-            this.in = new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            // Throw a more specific SocketStreamException
-            throw new CustomExceptions.SocketStreamException("Error setting up socket streams.", e);
-        }
+        this.in = in;
+        this.out = out;
+  
     }
+
+
 
     @Override
     public Card chooseRedAppleCard() {
         try {
             out.writeObject("Choose a card");
             return (Card) in.readObject();
-        } catch (SocketException e) {
-            throw new CustomExceptions.OnlineCommunicationException("Error communicating with server due to socket issue.", e);
-        } catch (ClassNotFoundException e) {
-            throw new CustomExceptions.OnlineCommunicationException("Error receiving object from server. Class not found.", e);
-        } catch (IOException e) {
-            throw new CustomExceptions.OnlineCommunicationException("Error during communication.", e);  // Fallback for other IO issues
+        } catch (IOException | ClassNotFoundException e) {
+            throw new CustomExceptions.OnlineCommunicationException("Error communicating with the server.", e);
         }
     }
 
@@ -55,7 +46,7 @@ public class OnlinePlayer extends AbstractPlayer {
     public Card selectFavoriteRedApple(List<Card> submissions) {
         // Let the human player choose their favorite red apple from the submissions
         Scanner scanner = new Scanner(System.in);
-        logger.info("Select your favorite red apple from the following submissions:");
+        logger.warning("Select your favorite red apple from the following submissions:");
 
         for (int i = 0; i < submissions.size(); i++) {
             logger.info(i + ": " + submissions.get(i));
@@ -85,7 +76,7 @@ public class OnlinePlayer extends AbstractPlayer {
     public void setJudge(boolean isJudge) {
         this.isJudge = isJudge;
         if (isJudge) {
-            logger.info(getName() + " is now the judge.");
+            System.out.println(getName() + " is now the judge.");
         } else {
             logger.info(getName() + " is no longer the judge.");
         }

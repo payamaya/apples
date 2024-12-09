@@ -8,15 +8,14 @@ import com.Apples2Apples.deck.DeckShuffler;
 import com.Apples2Apples.judging.DefaultJudgingStrategy;
 import com.Apples2Apples.judging.JudgeManager;
 import com.Apples2Apples.judging.NotificationService;
-import com.Apples2Apples.networking.GameServer;
-import com.Apples2Apples.networking.INetworkServer;
-import com.Apples2Apples.networking.IServerFactory;
+
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.observer.GameObserver;
 import com.Apples2Apples.phases.GamePhase;
 import com.Apples2Apples.player.*;
 import com.Apples2Apples.util.*;
 
+import java.io.*;
 import java.util.List;
 
 /**
@@ -29,37 +28,32 @@ public class Game {
     private JudgeManager judgeManager;
     private int currentPhaseIndex;
     private List<GamePhase> phases;
-    private IServerFactory serverFactory;
     private final List<Card> greenApplesDeck;
     private final List<Card> redApplesDeck;
     private final JudgeSelector judgeSelector;
     private final int winningGreenApples;
 
-    
+
     private GameNotification gameNotification;
-    private final INetworkServer networkManager;
     private GameServer gameServer;
     private static final LoggerUtil logger = LoggerUtil.getInstance(Game.class);
     private final RedAppleSubmissionManager submissionManager = new RedAppleSubmissionManager();
     private final DeckManager deckManager;
     private PlayerManager playerManager;
-    
+
+
     /**
      * Creates a new Game instance with the provided players, table size, and server factory.
      *
-     * @param players       The list of players participating in the game.
-     * @param tableSize     The desired size of the game table.
-     * @param serverFactory The factory used to create the network server.
+     * @param players The list of players participating in the game.
      */
-    public Game(List<Player> players, int tableSize, IServerFactory serverFactory, List<GamePhase> phases) {
+    public Game(List<Player> players, int tableSize, List<GamePhase> phases,JudgeSelector judgeSelector) throws IOException {
         this.players = players;
-        this.networkManager = serverFactory.createServer();
-        this.gameServer = (GameServer) networkManager;
-        this.judgeSelector = new JudgeSelector(gameNotification);
+        this.gameServer = new GameServer(Constants.SERVER_PORT.getValue());
+//        this.judgeSelector = new JudgeSelector(gameNotification);
+        this.judgeSelector = judgeSelector;
         this.gameNotification = new GameNotification();
         this.deckManager = new DeckManager();
-        this.serverFactory = serverFactory;
-        this.judgeManager = judgeManager;
         this.phases = phases;
         this.currentPhaseIndex = 0;
         this.currentJudge = players.get(0);
@@ -69,34 +63,34 @@ public class Game {
         winningGreenApples = TabelSizeUtil.determineWinningGreenApples(players.size());
         judgeManager = new JudgeManager(new DefaultJudgingStrategy(), new NotificationService(gameNotification));
         playerManager = new PlayerManager();
-        players.forEach(player -> gameNotification.addObserver((GameObserver) player));
+
+        // Add only players who are GameObservers
+        players.forEach(player -> {
+            if (player instanceof GameObserver) {
+                ((GameObserver) player).update(); // This is just an example. Call the update method or other observer methods
+            }
+        });
         shuffleDecks();
         addBotPlayersIfNeeded(tableSize);
         dealInitialCards();
         randomizeJudge();
         assignJudge();
-        startServer();
     }
 
     public List<Card> getRedAppleSubmissions() {
         return submissionManager.getSubmissions();
     }
 
-    private void startServer() {
-        try {
-            networkManager.startServer();
-            logger.info("Server started on port " + Constants.SERVER_PORT.getValue());
-        } catch (Exception e) {
-            logger.error("Error starting server: " + e.getMessage(), e);
-        }
+    public RedAppleSubmissionManager getSubmissionManager() {
+        return submissionManager;
     }
 
     private List<Card> loadGreenAppleDeck() {
-        return CardUtil.createGreenApplesFromFile("resources/greenApples.txt");
+        return CardUtil.createGreenApplesFromFile("./greenApples.txt");
     }
 
     private List<Card> loadRedAppleDeck() {
-        return CardUtil.createRedApplesFromFile("resources/redApples.txt");
+        return CardUtil.createRedApplesFromFile("./redApples.txt");
     }
 
     private void shuffleDecks() {
@@ -114,7 +108,7 @@ public class Game {
     }
 
     // Use the DeckManager to deal initial cards to players
-    private void dealInitialCards() {
+    public void dealInitialCards() {
         int handSize = Constants.HAND_SIZE_LIMIT.getValue();
         deckManager.dealCards(players, redApplesDeck, handSize);
 
@@ -123,8 +117,9 @@ public class Game {
     }
 
     private void randomizeJudge() {
-        currentJudge = judgeSelector.selectAndNotifyRandomJudge(players);
+        judgeSelector.selectAndNotifyRandomJudge(players);
     }
+
     // Getter for JudgeManager
     public JudgeManager getJudgeManager() {
         return judgeManager;
@@ -144,32 +139,30 @@ public class Game {
     public void setCurrentJudge(Player currentJudge) {
         this.currentJudge = currentJudge;
     }
+
     public void notifyPlayers(String message) {
         gameNotification.setMessage(message);
     }
-           public void startGame(){
-                while(!isGameOver()){
-                    GamePhase currentPhase = phases.get(currentPhaseIndex);
-                    logger.info("********  The game has started! ********");
-                    currentPhase.execute(this);
 
-                    currentPhaseIndex = (currentPhaseIndex +1 ) % phases.size();
-                }
-               Player winner = getWinner();
-                logger.info("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
-           }
-//    public void startGame() {
-//        notifyPlayers("********  The game has started! ********");
-//
-//        while (!isGameOver()) {
-//            nextPhase();
-//        }
-//        Player winner = getWinner();
-//        notifyPlayers("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
-//    }
+    public void startGame() {
+        notifyPlayers("********  The game has started! ********");
+
+        while (!isGameOver()) {
+            GamePhase currentPhase = phases.get(currentPhaseIndex);
+            System.out.println("Starting phase: " + currentPhase.getClass().getSimpleName());
+            currentPhase.execute(this);
+
+            currentPhaseIndex = (currentPhaseIndex + 1) % phases.size();
+        }
+
+        Player winner = getWinner();
+        logger.info("Game over! The winner is: " + (winner != null ? winner.getName() : "No winner."));
+    }
+
     private boolean isGameOver() {
         return players.stream().anyMatch(player -> player.getScore() >= winningGreenApples);
     }
+
     public void nextPhase() {
         if (currentPhaseIndex < phases.size()) {
             phases.get(currentPhaseIndex).execute(this);
@@ -179,9 +172,11 @@ public class Game {
             System.out.println("Game Over or Round Complete.");
         }
     }
+
     public void restartPhases() {
         currentPhaseIndex = 0;  // Reset to first phase
     }
+
     public void drawGreenApple() {
         JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification);
     }
