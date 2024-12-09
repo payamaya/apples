@@ -67,6 +67,10 @@ public class BotPlayer extends AbstractPlayer implements Judge, PlayerObserver {
     @Override
     public void setJudge(boolean isJudge) {
         this.isJudge = isJudge;
+        // Only update the bot if it's the bot's state change
+        if (isJudge) {
+            logger.info(getName() + " is now the judge.");
+        }
     }
 
     @Override

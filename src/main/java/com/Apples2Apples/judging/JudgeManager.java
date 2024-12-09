@@ -88,17 +88,21 @@ public class JudgeManager {
      */
     public Player rotateJudge(List<Player> players, Player currentJudge) {
         int currentJudgeIndex = players.indexOf(currentJudge);
-        currentJudge.setJudge(false);
+        currentJudge.setJudge(false); // The current judge is no longer the judge
 
-        // Find the next player (next in the list, loop back to the first if we are at the end)
+        // Find the next player (loop back to the first if we are at the end)
         int nextJudgeIndex = (currentJudgeIndex + 1) % players.size();
         Player nextJudge = players.get(nextJudgeIndex);
 
-        nextJudge.setJudge(true);
+        nextJudge.setJudge(true);  // Set the next judge
 
+        // Notify the new judge only (not all players)
         notificationService.notify(nextJudge.getName() + " is the new judge.");
+
+        // You can also call a method to update the game state or player observers here if needed
         return nextJudge;
     }
+
 
 
 }

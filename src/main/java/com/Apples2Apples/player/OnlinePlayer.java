@@ -5,7 +5,7 @@ import com.Apples2Apples.exception.CustomExceptions;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -29,18 +29,34 @@ public class OnlinePlayer extends AbstractPlayer {
         this.out = out;
   
     }
-
-
-
     @Override
     public Card chooseRedAppleCard() {
-        try {
-            out.writeObject("Choose a card");
-            return (Card) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new CustomExceptions.OnlineCommunicationException("Error communicating with the server.", e);
+        Scanner scanner = new Scanner(System.in);
+        logger.warning("Choose a card to play:");
+        List<Card> cards = hand.getCards();
+        for (int i = 0; i < cards.size(); i++) {
+            System.out.println(i + ": " + cards.get(i));
         }
+
+        int choice = -1;
+        while (choice < 0 || choice >= cards.size()) {
+            try {
+                choice = scanner.nextInt();  // Read the player's card selection
+                scanner.nextLine();  // Clear the newline character after reading an integer
+                if (choice < 0 || choice >= cards.size()) {
+                    logger.warning("Invalid choice. Please select a card from the list.");
+                }
+            } catch (InputMismatchException e) {
+                logger.warning("Invalid input. Please enter a number.");
+                scanner.nextLine();  // Clear the invalid input from the buffer
+            }
+        }
+
+        return cards.get(choice);  // Return the chosen card
     }
+
+
+
 
     @Override
     public Card selectFavoriteRedApple(List<Card> submissions) {

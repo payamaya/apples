@@ -9,6 +9,7 @@ import com.Apples2Apples.player.PlayerFactory;
 import com.Apples2Apples.player.PlayerType;
 import com.Apples2Apples.observer.GameNotification;
 import com.Apples2Apples.util.JudgeSelector;
+import com.Apples2Apples.judging.NotificationService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,8 +54,9 @@ public class Main {
             players.add(PlayerFactory.createPlayer(PlayerType.BOT, "Bot" + (players.size() + 1), new ArrayList<>(), false));
         }
 
-        // Step 4: Initialize GameNotification and JudgeSelector
+        // Step 4: Initialize GameNotification, NotificationService, and JudgeSelector
         GameNotification gameNotification = new GameNotification(); // Create a new GameNotification
+        NotificationService notificationService = new NotificationService(gameNotification); // Create NotificationService
         JudgeSelector judgeSelector = new JudgeSelector(gameNotification); // Pass it to JudgeSelector
 
         // Step 5: Start the game
@@ -64,7 +66,7 @@ public class Main {
                 new JudgePhase(),
                 new ReplenishHandPhase(),
                 new RotateJudgePhase()
-        ), judgeSelector); // Pass JudgeSelector to Game
+        ), judgeSelector, notificationService); // Pass NotificationService to Game
 
         game.startGame();
     }

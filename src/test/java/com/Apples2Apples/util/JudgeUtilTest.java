@@ -18,8 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class JudgeUtilTest {
     private List<Card> greenApplesDeck;
     private GameNotification gameNotification;
-    private List<Card> cards;
-
+    private List<Player> players; // Add this to hold the list of players
 
     @BeforeEach
     void setUp() {
@@ -28,25 +27,34 @@ class JudgeUtilTest {
         greenApplesDeck.add(new GreenAppleCard("Fresh"));
 
         gameNotification = new GameNotification();
-        // Provide an empty list of cards as required by BotPlayer constructor
-        Player judge = new BotPlayer("JudgeBot", cards, true);
-        gameNotification.addObserver((GameObserver) judge);
+
+        // Initialize the list of players
+        players = new ArrayList<>();
+        players.add(new BotPlayer("JudgeBot", new ArrayList<>(), true));
+        players.add(new BotPlayer("PlayerBot1", new ArrayList<>(), false));
+        players.add(new BotPlayer("PlayerBot2", new ArrayList<>(), false));
+
+        // Add the players as observers to GameNotification
+        for (Player player : players) {
+            gameNotification.addObserver((GameObserver) player);
+        }
     }
-
-
-
 
     @Test
     void testDrawGreenApple() {
-        Card drawnCard = JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification);
+        Card drawnCard = JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification, players);
         assertNotNull(drawnCard);
-        assertEquals("Sour", drawnCard.getValue());
-        assertEquals(1, greenApplesDeck.size());
+        assertEquals("Sour", drawnCard.getValue()); // Verify the first card is drawn
+        assertEquals(1, greenApplesDeck.size());    // Deck size should decrease by 1
+
+        // Check if the notification was sent to all players
+        assertTrue(gameNotification.getMessage().contains("won the green apple"));
     }
 
     @Test
     void testDrawGreenAppleEmptyDeck() {
-        greenApplesDeck.clear();
-        assertThrows(CustomExceptions.JudgeUtilException.class, () -> JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification));
+        greenApplesDeck.clear(); // Clear the deck to simulate an empty deck
+        assertThrows(CustomExceptions.JudgeUtilException.class, () ->
+                JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification, players));
     }
 }

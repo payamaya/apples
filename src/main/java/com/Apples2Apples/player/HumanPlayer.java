@@ -16,10 +16,11 @@ import java.util.logging.Logger;
 public class HumanPlayer extends AbstractPlayer implements Judge {
     private static final Logger logger = Logger.getLogger(HumanPlayer.class.getName());
     private boolean isJudge;
+    private int score = 0;
 
     public HumanPlayer(String name) {
         super(name);
-        this.isJudge = false;
+        this.isJudge = isJudge;
     }
 
     public HumanPlayer(String name, List<Card> cards, boolean isJudge) {
@@ -48,30 +49,14 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
         return cards.get(choice);
     }
 
-
-    @Override
-    public boolean canSeeCards() {
-        return false;
-    }
-
-    @Override
-    public void setCanSeeCards(boolean canSeeCards) {}
-
     @Override
     public Card selectFavoriteRedApple(List<Card> submissions) {
         // Let the human player choose their favorite red apple from the submissions
         Scanner scanner = new Scanner(System.in);
 
-        logger.info("Select your favorite red apple from the following submissions:");
-
-        for (int i = 0; i < submissions.size(); i++) {
-
-            logger.info(i + ": " + submissions.get(i));
-        }
-
+        // Remove the log here, as it's already logged in `chooseRedAppleCard()`
         int choice = scanner.nextInt();
         try {
-            choice = scanner.nextInt();
             if (choice < 0 || choice >= submissions.size()) {
                 throw new CustomExceptions.InvalidUserInputException("Invalid choice. Please select a card from the list.");
             }
@@ -81,6 +66,14 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
         return submissions.get(choice);
     }
 
+    @Override
+    public boolean canSeeCards() {
+        return false;
+    }
+
+    @Override
+    public void setCanSeeCards(boolean canSeeCards) {
+    }
 
     @Override
     public Card selectRedApple() {
@@ -96,15 +89,29 @@ public class HumanPlayer extends AbstractPlayer implements Judge {
     public void setJudge(boolean isJudge) {
         this.isJudge = isJudge;
         if (isJudge) {
-            logger.info(getName() + " is now the judge.");
+            System.out.println(getName() + " is now the judge.");
+            // Do not notify other players here, just set the judge for this player
         } else {
             logger.info(getName() + " is no longer the judge.");
         }
     }
 
+
+    @Override
+    public int getScore() {
+        return score;
+    }
+
+    @Override
+    public void incrementScore() {
+        score++;  // Increment score
+        logger.info(getName() + "'s score is now: " + score);
+    }
+
+
     @Override
     public boolean isJudge() {
-        return false;
+        return isJudge;
     }
 }
 

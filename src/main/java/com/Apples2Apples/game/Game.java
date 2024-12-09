@@ -32,7 +32,7 @@ public class Game {
     private final List<Card> redApplesDeck;
     private final JudgeSelector judgeSelector;
     private final int winningGreenApples;
-
+        private NotificationService notificationService;
 
     private GameNotification gameNotification;
     private GameServer gameServer;
@@ -47,8 +47,9 @@ public class Game {
      *
      * @param players The list of players participating in the game.
      */
-    public Game(List<Player> players, int tableSize, List<GamePhase> phases,JudgeSelector judgeSelector) throws IOException {
+    public Game(List<Player> players, int tableSize, List<GamePhase> phases, JudgeSelector judgeSelector, NotificationService notificationService) throws IOException {
         this.players = players;
+        this.notificationService = notificationService;
         this.gameServer = new GameServer(Constants.SERVER_PORT.getValue());
 //        this.judgeSelector = new JudgeSelector(gameNotification);
         this.judgeSelector = judgeSelector;
@@ -149,7 +150,7 @@ public class Game {
 
         while (!isGameOver()) {
             GamePhase currentPhase = phases.get(currentPhaseIndex);
-            System.out.println("Starting phase: " + currentPhase.getClass().getSimpleName());
+//            System.out.println("Starting phase: " + currentPhase.getClass().getSimpleName());
             currentPhase.execute(this);
 
             currentPhaseIndex = (currentPhaseIndex + 1) % phases.size();
@@ -160,25 +161,13 @@ public class Game {
     }
 
     private boolean isGameOver() {
+        int winningGreenApples = TabelSizeUtil.determineWinningGreenApples(players.size());
         return players.stream().anyMatch(player -> player.getScore() >= winningGreenApples);
     }
 
-    public void nextPhase() {
-        if (currentPhaseIndex < phases.size()) {
-            phases.get(currentPhaseIndex).execute(this);
-            currentPhaseIndex++;
-        } else {
-            rotateJudge();
-            System.out.println("Game Over or Round Complete.");
-        }
-    }
-
-    public void restartPhases() {
-        currentPhaseIndex = 0;  // Reset to first phase
-    }
 
     public void drawGreenApple() {
-        JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification);
+        JudgeUtil.drawGreenApple(greenApplesDeck, gameNotification, players);
     }
 
     public void playedRedApple() {
@@ -213,7 +202,13 @@ public class Game {
 
     private void assignJudge() {
         if (!players.isEmpty()) {
-            players.get(0).setJudge(true);
+            // Set the first player as the judge and notify only that player
+            Player firstPlayer = players.get(0);
+            firstPlayer.setJudge(true);
+
+            // Send notification about the first judge, if necessary
+            notificationService.notify(firstPlayer.getName() + " is the first judge.");
         }
     }
+
 }

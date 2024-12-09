@@ -102,6 +102,8 @@ public abstract class AbstractPlayer implements Player {
      */
     @Override
     public abstract Card chooseRedAppleCard();
+
+    public abstract Card selectFavoriteRedApple(List<Card> submissions);
     /**
      * Abstract method for selecting the favorite red apple card from submissions.
      * This method must be implemented by subclasses of AbstractPlayer.
@@ -109,5 +111,5 @@ public abstract class AbstractPlayer implements Player {
      * @param submissions The list of red apple cards submitted by players.
      * @return The selected favorite red apple card.
      */
-    public abstract Card selectFavoriteRedApple(List<Card> submissions);
+//    public abstract Card selectFavoriteRedApple(List<Card> submissions);
 }
